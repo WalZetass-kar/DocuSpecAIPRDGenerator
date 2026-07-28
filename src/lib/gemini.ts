@@ -14,7 +14,7 @@ export async function checkAndDeductCredits(): Promise<boolean> {
 
 async function callGemini(promptText: string, systemInstruction: string, expectJson = false): Promise<string> {
   if (!GEMINI_API_KEY) {
-    throw new Error('API Key Gemini tidak ditemukan! Harap masukkan di .env.local');
+    throw new Error('API Key Gemini tidak ditemukan! Harap isi VITE_GEMINI_API_KEY di Environment Variables Vercel (atau di .env.local jika lokal).');
   }
 
   // Deduct credits before generating
