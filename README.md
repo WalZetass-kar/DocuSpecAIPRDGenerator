@@ -6,25 +6,26 @@ Dibangun dengan teknologi AI dari Gemini dan diintegrasikan dengan sistem real-t
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Fitur Utama Level Enterprise
 
-*   🤖 **AI-Powered PRD Generation:** Hasilkan PRD lengkap dan terstruktur hanya dengan memberikan *prompt* atau deskripsi singkat mengenai produk Anda.
-*   📝 **Rich Text PRD Editor:** Editor dokumen yang interaktif dan *real-time* untuk menyesuaikan dan memperbaiki spesifikasi dengan mudah.
-*   💳 **Sistem Kredit & Langganan (SaaS):** Dilengkapi sistem monetisasi (*Pro* & *Enterprise*) menggunakan poin kredit AI, terhubung dengan dashboard admin.
-*   🛠️ **Manajemen Tim & Kolaborasi:** Undang anggota tim, kelola *role*, dan lacak aktivitas kolaborasi Anda dalam satu *workspace*.
-*   📂 **Manajemen Folder & Workspace:** Atur semua dokumen proyek Anda dengan mudah menggunakan sistem folder yang rapi dan terstruktur.
-*   💾 **Export ke PDF & Markdown:** Kemudahan dalam mendistribusikan dokumen. Anda dapat mengunduhnya dalam format PDF profesional atau format Markdown (*.md*) untuk developer.
-*   🔐 **Role-Based Access Control (RBAC):** Keamanan setingkat industri menggunakan Supabase *Row Level Security* (RLS) untuk membedakan akses Admin/Developer dan User biasa.
-*   🎨 **Desain Modern & Responsif:** Antarmuka (*User Interface*) premium dengan dukungan penuh untuk mode gelap (*Dark Mode*).
+*   🤖 **AI-Powered 36-Section PRD Engine:** Generasi otomatis 36 seksi spesifikasi produk mendalam menggunakan **Gemini 3.6 Flash** (lengkap dengan *fallback chain* otomatis ke `gemini-2.0-flash` dan `gemini-pro-latest`).
+*   🎨 **Full-Screen Studio PRD Workspace:** Editor bebas gangguan (*distraction-free workspace*) bergaya Notion & Linear dengan *TOC section filter*, *inline AI rewriting*, dan penanda kelengkapan persentase dokumen.
+*   📊 **Visual Flowchart & System Architecture:** Render visual interaktif untuk *User Journey*, *Entity Relationship Diagram (ERD)*, dan arsitektur produk.
+*   🔍 **Visual Diff History Viewer:** Bandingkan revisi versi dokumen (v1.0 vs v1.1) secara berdampingan dengan penyorotan teks penambahan (hijau) dan penghapusan (merah).
+*   🎫 **1-Click GitHub Issues & Jira Exporter:** Unduh berkas CSV terformat siap *import* langsung menjadi tiket pekerjaan resmi di GitHub Projects, Jira Board, atau Trello.
+*   🏢 **Custom Company Branding Exporter:** Kustomisasi nama perusahaan, logo, dan skema warna untuk dokumen ekspor **Microsoft Word (.docx)** dan **PDF**.
+*   💳 **Presisi Pengurangan 36 Kredit AI:** Pengurangan 36 poin kredit secara otomatis dan *real-time* untuk pembuatan PRD 36 seksi.
+*   🔐 **Role-Based Security (RBAC & RLS):** Keamanan hak akses pengguna biasa (*User*) vs pengembang (*Developer*) dengan Supabase RPC & RLS modal hapus pengguna.
+*   ⚡ **Vercel SPA Deployment & Routing:** Dilengkapi `vercel.json` rewrite rules untuk eliminasi error 404 saat *refresh* di Vercel.
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## 🛠️ Arsitektur & Teknologi
 
-*   **Frontend:** React, TypeScript, Vite, Tailwind CSS (Vanilla styling & Lucide Icons)
-*   **Backend & Database:** Supabase (PostgreSQL, Auth, RLS, Storage)
-*   **AI Engine:** Google Gemini AI API
-*   **Deployment:** Mendukung environment Node.js dan edge functions.
+*   **Frontend:** React 18, TypeScript, Vite, Tailwind CSS (Vanilla Styling & Lucide Icons)
+*   **Backend & Database:** Supabase (PostgreSQL, Auth, Row Level Security, Storage, RPC Procedures)
+*   **AI Engine:** Google Gemini AI API (`gemini-flash-latest`, `gemini-2.0-flash`, `gemini-2.0-flash-lite`, `gemini-pro-latest`)
+*   **Deployment:** Vercel SPA Rewrites + Environment Prefixing (`VITE_`, `GEMINI_`, `NEXT_PUBLIC_`)
 
 ---
 
@@ -37,7 +38,6 @@ Dibangun dengan teknologi AI dari Gemini dan diintegrasikan dengan sistem real-t
     ```
 
 2.  **Instalasi Dependensi**
-    Pastikan Anda sudah menginstal Node.js dan `npm` (atau `bun`/`yarn`).
     ```bash
     npm install
     ```
@@ -58,9 +58,9 @@ Dibangun dengan teknologi AI dari Gemini dan diintegrasikan dengan sistem real-t
 
 ---
 
-## 👨‍💻 Tentang Pembuat
+## 👨‍💻 Hak Cipta & Hak Milik
 
-Aplikasi ini dikembangkan dan dimiliki secara eksklusif oleh **WalZetass-Kar**. Didesain dengan fokus pada performa, estetika UI/UX premium, dan fungsionalitas yang kuat untuk memenuhi kebutuhan standar manajemen produk perangkat lunak modern.
+Aplikasi ini dirancang, dikembangkan, dan dimiliki secara eksklusif oleh **WalZetass-Kar**. Didesain dengan fokus pada estetika UI/UX tingkat tinggi dan fungsionalitas SaaS yang tangguh untuk kebutuhan manajemen produk profesional.
 
 ---
 *© 2026 DocuSpecAIPRDGenerator. Built with ❤️ Owned by WalZetass-Kar.*
