@@ -281,18 +281,38 @@ ${prd.aiCodingPrompt}
     setTimeout(() => setCopiedPrompt(false), 2000);
   };
 
+  const handleDownloadGitHubIssues = () => {
+    let csvContent = 'Title,Priority,User Story,Acceptance Criteria\n';
+    prd.functionalRequirements?.forEach((req) => {
+      const title = `"${req.id}: ${req.feature.replace(/"/g, '""')}"`;
+      const priority = `"${req.priority}"`;
+      const story = `"${req.userStory.replace(/"/g, '""')}"`;
+      const ac = `"${(Array.isArray(req.acceptanceCriteria) ? req.acceptanceCriteria.join(' | ') : req.acceptanceCriteria || '').replace(/"/g, '""')}"`;
+      csvContent += `${title},${priority},${story},${ac}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${prd.title.toLowerCase().replace(/\s+/g, '-')}-github-issues.csv`;
+    a.click();
+  };
+
+  const [companyName, setCompanyName] = React.useState('DocuSpec AI Enterprise');
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 no-print">
-      <div className="w-full max-w-xl bg-white dark:bg-gray-900 border border-gray-200  dark:border-gray-800 rounded-2xl shadow-2xl overflow-hidden font-sans text-gray-900 dark:text-gray-100 text-xs">
+      <div className="w-full max-w-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl overflow-hidden font-sans text-gray-900 dark:text-gray-100 text-xs max-h-[90vh] overflow-y-auto custom-scrollbar">
         {/* Modal Header */}
-        <div className="p-5 border-b border-gray-100/10 dark:border-gray-800 flex items-center justify-between">
+        <div className="p-5 border-b border-gray-100/10 dark:border-gray-800 flex items-center justify-between sticky top-0 bg-white dark:bg-gray-900 z-10">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[#B11226]/10 text-[#B11226] flex items-center justify-center">
               <Download className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-gray-900 dark:text-white">Ekspor Dokumen PRD</h3>
-              <p className="text-[11px] text-gray-500">Pilih format unduhan atau salin prompt AI.</p>
+              <h3 className="font-bold text-sm text-gray-900 dark:text-white">Ekspor Dokumen PRD & GitHub/Jira Integrasi</h3>
+              <p className="text-[11px] text-gray-500">Pilih format unduhan, ekspor ke GitHub Issues, atau salin prompt AI.</p>
             </div>
           </div>
           <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded">
@@ -302,10 +322,22 @@ ${prd.aiCodingPrompt}
 
         {/* Modal Content Options */}
         <div className="p-6 space-y-4">
+          {/* Custom Branding Input */}
+          <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 space-y-2">
+            <span className="font-bold text-[11px] text-gray-700 dark:text-gray-300 block">Kustomisasi Branding Perusahaan (DOCX / PDF):</span>
+            <input
+              type="text"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder="Nama Perusahaan / Organisasi..."
+              className="w-full px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs outline-none focus:border-[#B11226]"
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={handleDownloadMarkdown}
-              className="p-3.5 rounded-2xl border border-gray-200  dark:border-gray-800 hover:border-[#B11226] bg-gray-50 dark:bg-gray-800/60 text-left transition-all space-y-1 group"
+              className="p-3.5 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-[#B11226] bg-gray-50 dark:bg-gray-800/60 text-left transition-all space-y-1 group"
             >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-gray-900 dark:text-white group-hover:text-[#B11226]">
@@ -318,7 +350,7 @@ ${prd.aiCodingPrompt}
 
             <button
               onClick={handleDownloadDOCX}
-              className="p-3.5 rounded-2xl border border-gray-200  dark:border-gray-800 hover:border-[#B11226] bg-gray-50 dark:bg-gray-800/60 text-left transition-all space-y-1 group"
+              className="p-3.5 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-[#B11226] bg-gray-50 dark:bg-gray-800/60 text-left transition-all space-y-1 group"
             >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-gray-900 dark:text-white group-hover:text-[#B11226]">
@@ -330,8 +362,21 @@ ${prd.aiCodingPrompt}
             </button>
 
             <button
+              onClick={handleDownloadGitHubIssues}
+              className="p-3.5 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-purple-500 bg-purple-50/50 dark:bg-purple-950/20 text-left transition-all space-y-1 group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-gray-900 dark:text-white group-hover:text-purple-600">
+                  GitHub & Jira CSV
+                </span>
+                <Terminal className="w-4 h-4 text-purple-500" />
+              </div>
+              <p className="text-[10px] text-gray-500">Ekspor User Stories ke Tiket Issues.</p>
+            </button>
+
+            <button
               onClick={handlePrintPDF}
-              className="p-3.5 rounded-2xl border border-gray-200  dark:border-gray-800 hover:border-[#B11226] bg-gray-50 dark:bg-gray-800/60 text-left transition-all space-y-1 group"
+              className="p-3.5 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-[#B11226] bg-gray-50 dark:bg-gray-800/60 text-left transition-all space-y-1 group"
             >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-gray-900 dark:text-white group-hover:text-[#B11226]">
@@ -340,19 +385,6 @@ ${prd.aiCodingPrompt}
                 <Printer className="w-4 h-4 text-emerald-500" />
               </div>
               <p className="text-[10px] text-gray-500">Tampilan cetak siap presentasi.</p>
-            </button>
-
-            <button
-              onClick={handleDownloadJSON}
-              className="p-3.5 rounded-2xl border border-gray-200  dark:border-gray-800 hover:border-[#B11226] bg-gray-50 dark:bg-gray-800/60 text-left transition-all space-y-1 group"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-gray-900 dark:text-white group-hover:text-[#B11226]">
-                  Structured JSON
-                </span>
-                <Code className="w-4 h-4 text-amber-500" />
-              </div>
-              <p className="text-[10px] text-gray-500">Skema JSON lengkap 36 poin.</p>
             </button>
           </div>
 
