@@ -118,13 +118,6 @@ Begin step-by-step implementation following the 36-point PRD backlog.`;
             <ArrowRight className="w-5 h-5" />
           </button>
 
-          <button
-            onClick={onViewDemo}
-            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 text-base font-semibold text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-800 shadow-sm transition-all cursor-pointer"
-          >
-            <Play className="w-5 h-5 text-[#B11226] fill-[#B11226]" />
-            <span>Lihat Demo Interaktif</span>
-          </button>
         </div>
 
         {/* Feature Badges under CTA */}
@@ -210,12 +203,6 @@ Begin step-by-step implementation following the 36-point PRD backlog.`;
                     Versi 1.2.0 • Diperbarui oleh Senior Product Manager
                   </p>
                 </div>
-                <button
-                  onClick={onViewDemo}
-                  className="px-3.5 py-1.5 text-xs font-bold text-white bg-[#B11226] hover:bg-[#7A0C12] rounded-lg shadow-sm transition-colors"
-                >
-                  Buka Editor Demo
-                </button>
               </div>
 
               {/* Sample Output Box */}
@@ -461,12 +448,6 @@ Response: 200 OK { prdDocument }`}
               className="px-8 py-3.5 text-base font-bold text-[#B11226] bg-white hover:bg-gray-100 rounded-xl shadow-lg transition-all cursor-pointer"
             >
               Buat PRD Sekarang
-            </button>
-            <button
-              onClick={onViewDemo}
-              className="px-8 py-3.5 text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-gray-200 rounded-xl transition-all cursor-pointer"
-            >
-              Jelajahi Demo
             </button>
           </div>
         </div>
