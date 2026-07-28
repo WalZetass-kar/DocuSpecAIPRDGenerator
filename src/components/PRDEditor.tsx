@@ -36,7 +36,8 @@ import {
   CheckSquare,
   Search,
   Gauge,
-  Workflow
+  Workflow,
+  X
 } from 'lucide-react';
 import { PRDDocument, Folder, PRDStatus, UserStoryItem, TaskItem } from '../types';
 import { AIInsightsPanel } from './AIInsightsPanel';
@@ -203,6 +204,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
   const [customAIChatMsg, setCustomAIChatMsg] = React.useState('');
   const [chatHistory, setChatHistory] = React.useState<{ role: 'user' | 'assistant'; text: string }[]>([]);
   const [tocSearchQuery, setTocSearchQuery] = React.useState('');
+  const [showTocMobile, setShowTocMobile] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
 
   // Local checklist state for release checklist
@@ -337,35 +339,65 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
         </div>
 
         {/* Right: Studio Quick Actions */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
             onClick={() => setAiRefineDrawerOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#B11226] to-[#7A0C12] text-white text-xs font-bold shadow-sm shadow-[#B11226]/20 hover:opacity-95 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#B11226] to-[#7A0C12] text-white text-xs font-bold shadow-sm shadow-[#B11226]/20 hover:opacity-95 transition-all cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">AI Assistant & Refine</span>
           </button>
           <button
             onClick={onOpenExportModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold transition-all cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Ekspor</span>
+            <span className="hidden sm:inline">Ekspor</span>
           </button>
           <button
             onClick={onOpenShareModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold transition-all cursor-pointer"
           >
             <Share2 className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Bagikan</span>
+            <span className="hidden sm:inline">Bagikan</span>
           </button>
         </div>
       </header>
 
       {/* Editor Body: Left TOC Sidebar + Center Document Canvas */}
-      <div className="flex flex-1 min-h-0 w-full overflow-hidden">
+      <div className="flex flex-1 min-h-0 w-full overflow-hidden relative">
+        {/* Mobile TOC Toggle Button */}
+        <button
+          onClick={() => setShowTocMobile(!showTocMobile)}
+          className="lg:hidden fixed bottom-6 left-6 z-50 w-12 h-12 rounded-full bg-[#B11226] text-white shadow-lg shadow-[#B11226]/30 flex items-center justify-center cursor-pointer"
+        >
+          <ListOrdered className="w-5 h-5" />
+        </button>
+
+        {/* Mobile TOC Overlay Backdrop */}
+        {showTocMobile && (
+          <div
+            className="lg:hidden fixed inset-0 bg-black/40 z-40"
+            onClick={() => setShowTocMobile(false)}
+          />
+        )}
+
         {/* Left TOC Navigator Sidebar */}
-        <aside className="w-full lg:w-60 xl:w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 p-4 shrink-0 space-y-4 min-w-0 overflow-y-auto custom-scrollbar">
+        <aside className={`
+          fixed lg:static inset-y-0 left-0 z-40
+          w-72 lg:w-60 xl:w-64
+          bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800
+          p-4 shrink-0 space-y-4 min-w-0 overflow-y-auto custom-scrollbar
+          transform transition-transform duration-200 ease-in-out
+          ${showTocMobile ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}>
+          {/* Mobile Close Button */}
+          <button
+            onClick={() => setShowTocMobile(false)}
+            className="lg:hidden absolute top-3 right-3 p-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+          >
+            <X className="w-4 h-4" />
+          </button>
           <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
             Daftar Seksi PRD (36 Poin)
           </div>
@@ -407,9 +439,9 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 min-w-0 w-full p-4 sm:p-6 lg:p-8 space-y-8 max-w-4xl xl:max-w-5xl mx-auto custom-scrollbar overflow-x-hidden">
+      <main className="flex-1 min-w-0 w-full p-3 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-4xl xl:max-w-5xl mx-auto custom-scrollbar overflow-x-hidden">
         {/* Document Header Panel */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs space-y-4">
+        <div className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1.5 flex-1">
               <div className="flex items-center gap-2 flex-wrap">

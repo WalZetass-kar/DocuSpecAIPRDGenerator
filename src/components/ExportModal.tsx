@@ -13,7 +13,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, prd }
   const [copiedPrompt, setCopiedPrompt] = React.useState(false);
   const [launchedPlatform, setLaunchedPlatform] = React.useState<string | null>(null);
 
-  if (!isOpen) return null;
+  if (!isOpen || !prd) return null;
 
   // Helper to copy prompt and launch external AI tool directly
   const handleLaunchAITool = (url: string, platformName: string) => {
