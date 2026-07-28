@@ -60,9 +60,25 @@ export function App() {
   
   const [toastMessage, setToastMessage] = React.useState<{title: string, msg: string} | null>(null);
 
-  // PRD & Folders State
-  const [prds, setPrds] = React.useState<PRDDocument[]>([]);
-  const [folders, setFolders] = React.useState<Folder[]>([]);
+  // PRD & Folders State — initialize from localStorage as fallback
+  const [prds, setPrds] = React.useState<PRDDocument[]>(() => {
+    try {
+      const saved = localStorage.getItem('docuspec_prds');
+      if (saved) return JSON.parse(saved);
+    } catch (err) {
+      console.error('Failed to load PRDs from localStorage:', err);
+    }
+    return [];
+  });
+  const [folders, setFolders] = React.useState<Folder[]>(() => {
+    try {
+      const saved = localStorage.getItem('docuspec_folders');
+      if (saved) return JSON.parse(saved);
+    } catch (err) {
+      console.error('Failed to load folders from localStorage:', err);
+    }
+    return [];
+  });
 
   React.useEffect(() => {
     async function loadData() {
@@ -99,7 +115,7 @@ export function App() {
       if (foldersErr) {
         console.warn('Failed to load folders:', foldersErr.message);
       }
-      if (dbFolders) {
+      if (dbFolders && dbFolders.length > 0) {
         setFolders(dbFolders.map(f => ({
           id: f.id,
           name: f.name,
@@ -112,7 +128,7 @@ export function App() {
       if (prdsErr) {
         console.warn('Failed to load PRDs:', prdsErr.message);
       }
-      if (dbPrds) {
+      if (dbPrds && dbPrds.length > 0) {
         setPrds(dbPrds.map(p => ({
           ...p.content,
           id: p.id,
