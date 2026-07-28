@@ -126,16 +126,17 @@ User message: ${query}
       };
       setMessages((prev) => [...prev, assistantMsg]);
     } catch (err: any) {
-      // Smart offline fallback
-      let fallbackAnswer = 'Maaf, terjadi gangguan jaringan. ';
-      if (query.toLowerCase().includes('prd')) {
-        fallbackAnswer +=
-          'PRD (Product Requirements Document) yang efektif mencakup: Executive Summary, Problem Statement, Target User & Persona, Functional Requirements dengan kriteria penerimaan, Architecture & Tech Stack, serta Risk & Timeline.';
-      } else if (query.toLowerCase().includes('tech stack') || query.toLowerCase().includes('stack')) {
-        fallbackAnswer +=
-          'Untuk aplikasi modern, kombinasi yang sangat direkomendasikan adalah React/Vite + Tailwind CSS + TypeScript di Frontend, Express / Node.js di Backend, dan Firebase Firestore / Cloud SQL untuk Database.';
-      } else {
-        fallbackAnswer += 'Bisa diulangi atau diperjelas pertanyaan Anda terkait proyek ini?';
+      let fallbackAnswer = err?.message || 'Maaf, terjadi gangguan jaringan. ';
+      if (!err?.message) {
+        if (query.toLowerCase().includes('prd')) {
+          fallbackAnswer +=
+            'PRD (Product Requirements Document) yang efektif mencakup: Executive Summary, Problem Statement, Target User & Persona, Functional Requirements dengan kriteria penerimaan, Architecture & Tech Stack, serta Risk & Timeline.';
+        } else if (query.toLowerCase().includes('tech stack') || query.toLowerCase().includes('stack')) {
+          fallbackAnswer +=
+            'Untuk aplikasi modern, kombinasi yang sangat direkomendasikan adalah React/Vite + Tailwind CSS + TypeScript di Frontend, Express / Node.js di Backend, dan Firebase Firestore / Cloud SQL untuk Database.';
+        } else {
+          fallbackAnswer += 'Bisa diulangi atau diperjelas pertanyaan Anda terkait proyek ini?';
+        }
       }
 
       const fallbackMsg: Message = {
