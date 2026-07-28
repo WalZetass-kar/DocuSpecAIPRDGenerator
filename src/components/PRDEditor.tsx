@@ -37,6 +37,7 @@ import {
   Search,
   Gauge,
   Workflow,
+  Bell,
   X
 } from 'lucide-react';
 import { PRDDocument, Folder, PRDStatus, UserStoryItem, TaskItem } from '../types';
@@ -295,16 +296,35 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
     { id: 'sec-summary', label: '1. Executive Summary', icon: FileText },
     { id: 'sec-problem', label: '2. Problem & Solution', icon: AlertTriangle },
     { id: 'sec-goals', label: '3. Goals & Metrics', icon: Activity },
-    { id: 'sec-personas', label: '4. User Personas & Stakeholders', icon: Users },
-    { id: 'sec-journey', label: '5. User Journey & Scope', icon: Compass },
-    { id: 'sec-functional', label: '6. Functional Req (User Stories)', icon: ListOrdered },
-    { id: 'sec-architecture', label: '7. Architecture & Tech Stack', icon: Layers },
-    { id: 'sec-api', label: '8. API Specification', icon: Code2 },
-    { id: 'sec-database', label: '9. Database Schema (ERD)', icon: Database },
-    { id: 'sec-design', label: '10. Design System & UI', icon: Edit3 },
-    { id: 'sec-security', label: '11. Security & Accessibility', icon: ShieldCheck },
-    { id: 'sec-tasks', label: '12. Task Backlog & Release', icon: CheckCircle2 },
-    { id: 'sec-prompt', label: '13. AI Coding Prompt', icon: Terminal },
+    { id: 'sec-business-req', label: '4. Business Requirements', icon: Layers },
+    { id: 'sec-functional', label: '5. Functional Requirements', icon: ListOrdered },
+    { id: 'sec-nfr', label: '6. Non-Functional Requirements', icon: Gauge },
+    { id: 'sec-acceptance', label: '7. Acceptance Criteria Summary', icon: CheckSquare },
+    { id: 'sec-personas', label: '8. User Personas & Stakeholders', icon: Users },
+    { id: 'sec-journey', label: '9. User Journey & Scope', icon: Compass },
+    { id: 'sec-flow', label: '10. Flow Diagram', icon: Workflow },
+    { id: 'sec-ia', label: '11. Information Architecture', icon: Layers },
+    { id: 'sec-features', label: '12. Feature List (MoSCoW)', icon: Zap },
+    { id: 'sec-architecture', label: '13. Architecture & Tech Stack', icon: Cpu },
+    { id: 'sec-api', label: '14. API Specification', icon: Code2 },
+    { id: 'sec-database', label: '15. Database Schema (ERD)', icon: Database },
+    { id: 'sec-erd-summary', label: '16. Entity Relationship Summary', icon: Workflow },
+    { id: 'sec-roles', label: '17. Role Permissions', icon: Lock },
+    { id: 'sec-notifications', label: '18. Notification Flow', icon: Bell },
+    { id: 'sec-ui', label: '19. UI Requirements', icon: Edit3 },
+    { id: 'sec-design', label: '20. Design System & Colors', icon: Edit3 },
+    { id: 'sec-components', label: '21. Component List', icon: Layers },
+    { id: 'sec-responsive', label: '22. Responsive Requirements', icon: Gauge },
+    { id: 'sec-security', label: '23. Security & Accessibility', icon: ShieldCheck },
+    { id: 'sec-seo', label: '24. SEO Requirements', icon: Search },
+    { id: 'sec-analytics', label: '25. Analytics Strategy', icon: Activity },
+    { id: 'sec-testing', label: '26. Testing Strategy', icon: CheckCircle2 },
+    { id: 'sec-deployment', label: '27. Deployment Strategy', icon: Zap },
+    { id: 'sec-risk', label: '28. Risk Assessment', icon: AlertTriangle },
+    { id: 'sec-roadmap', label: '29. Future Roadmap', icon: Compass },
+    { id: 'sec-tasks', label: '30. Task Backlog & Release', icon: CheckCircle2 },
+    { id: 'sec-sprint', label: '31. Sprint Planning', icon: Activity },
+    { id: 'sec-prompt', label: '32. AI Coding Prompt', icon: Terminal },
   ];
 
   const filteredSections = sectionsList.filter(s => 
@@ -399,7 +419,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
             <X className="w-4 h-4" />
           </button>
           <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
-            Daftar Seksi PRD (36 Poin)
+            Daftar Seksi PRD (32 Poin)
           </div>
 
           <nav className="space-y-1 text-xs font-medium">
@@ -675,11 +695,11 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </section>
 
-        {/* 4. User Personas & Stakeholders */}
+        {/* 8. User Personas & Stakeholders */}
         <section id="sec-personas" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
             <Users className="w-5 h-5 text-[#B11226]" />
-            <span>4. User Personas & Stakeholders</span>
+            <span>8. User Personas & Stakeholders</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -733,11 +753,11 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           )}
         </section>
 
-        {/* 5. User Journey & Scope */}
+        {/* 9. User Journey & Scope */}
         <section id="sec-journey" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
             <Compass className="w-5 h-5 text-[#B11226]" />
-            <span>5. User Journey & Product Scope</span>
+            <span>9. User Journey & Product Scope</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -771,12 +791,143 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </section>
 
-        {/* 4. Functional Requirements (User Stories) */}
+        {/* 10. Flow Diagram */}
+        <section id="sec-flow" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Workflow className="w-5 h-5 text-[#B11226]" />
+            <span>10. Flow Diagram</span>
+          </h2>
+          <div className="space-y-3">
+            {(prd.flowDiagram?.nodes || []).length > 0 ? (
+              <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {(prd.flowDiagram?.nodes || []).map((node, idx) => (
+                    <div
+                      key={idx}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${
+                        node.type === 'start'
+                          ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-700'
+                          : node.type === 'end'
+                          ? 'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-400 border-red-300 dark:border-red-700'
+                          : node.type === 'decision'
+                          ? 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border-amber-300 dark:border-amber-700 rotate-0'
+                          : 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border-blue-300 dark:border-blue-700'
+                      }`}
+                    >
+                      {node.label}
+                    </div>
+                  ))}
+                </div>
+                <div className="text-[10px] text-gray-400 font-mono space-y-1">
+                  {(prd.flowDiagram?.edges || []).map((edge, idx) => (
+                    <div key={idx}>
+                      {edge.from} → {edge.to}{edge.label ? ` (${edge.label})` : ''}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-gray-400 italic">Belum ada flow diagram.</p>
+            )}
+          </div>
+        </section>
+
+        {/* 11. Information Architecture */}
+        <section id="sec-ia" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Layers className="w-5 h-5 text-[#B11226]" />
+            <span>11. Information Architecture</span>
+          </h2>
+          <div className="space-y-2">
+            {(prd.informationArchitecture?.pages || []).length > 0 ? (
+              (prd.informationArchitecture?.pages || []).map((page, idx) => (
+                <div key={idx} className="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-xs space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-gray-900 dark:text-white">{page.title}</span>
+                    <span className="text-[10px] font-mono text-gray-400">{page.path}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {(page.components || []).map((comp, ci) => (
+                      <span key={ci} className="px-2 py-0.5 rounded bg-[#B11226]/10 text-[#B11226] dark:bg-[#B11226]/20 dark:text-red-400 text-[10px] font-bold">
+                        {comp}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-xs text-gray-400 italic">Belum ada information architecture.</p>
+            )}
+          </div>
+        </section>
+
+        {/* 12. Feature List (MoSCoW) */}
+        <section id="sec-features" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Zap className="w-5 h-5 text-[#B11226]" />
+            <span>12. Feature List (MoSCoW)</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Nama Fitur</th>
+                  <th className="p-3">Kategori</th>
+                  <th className="p-3">Effort</th>
+                  <th className="p-3">Deskripsi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(prd.featureList || []).map((feat, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{feat.name}</td>
+                    <td className="p-3">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        feat.category === 'MoSCoW - Must' ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400' :
+                        feat.category === 'MoSCoW - Should' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400' :
+                        feat.category === 'MoSCoW - Could' ? 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400' :
+                        'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
+                      }`}>
+                        {feat.category}
+                      </span>
+                    </td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{feat.effort}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{feat.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {(!prd.featureList || prd.featureList.length === 0) && (
+            <p className="text-xs text-gray-400 italic">Belum ada feature list.</p>
+          )}
+        </section>
+
+        {/* 4. Business Requirements */}
+        <section id="sec-business-req" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-3">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Layers className="w-5 h-5 text-[#B11226]" />
+            <span>4. Business Requirements</span>
+          </h2>
+          <div className="space-y-1.5">
+            {(prd.businessRequirements || []).map((req, idx) => (
+              <div key={idx} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                <span>{req}</span>
+              </div>
+            ))}
+            {(!prd.businessRequirements || prd.businessRequirements.length === 0) && (
+              <p className="text-xs text-gray-400 italic">Belum ada business requirements.</p>
+            )}
+          </div>
+        </section>
+
+        {/* 5. Functional Requirements (User Stories) */}
         <section id="sec-functional" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-800">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <ListOrdered className="w-5 h-5 text-[#B11226]" />
-              <span>4. Functional Requirements & Acceptance Criteria</span>
+              <span>5. Functional Requirements & Acceptance Criteria</span>
             </h2>
             <span className="text-xs font-mono font-bold text-gray-400">
               {prdFunctionalRequirements.length} Stories
@@ -836,11 +987,89 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </section>
 
-        {/* 5. API Specification */}
+        {/* 6. Non-Functional Requirements */}
+        <section id="sec-nfr" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Gauge className="w-5 h-5 text-[#B11226]" />
+            <span>6. Non-Functional Requirements</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Kategori</th>
+                  <th className="p-3">Requirement</th>
+                  <th className="p-3">Target</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(prd.nonFunctionalRequirements || []).map((nfr, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{nfr.category}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{nfr.requirement}</td>
+                    <td className="p-3 text-[#B11226] font-mono font-bold">{nfr.target}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {(!prd.nonFunctionalRequirements || prd.nonFunctionalRequirements.length === 0) && (
+            <p className="text-xs text-gray-400 italic">Belum ada non-functional requirements.</p>
+          )}
+        </section>
+
+        {/* 7. Acceptance Criteria Summary */}
+        <section id="sec-acceptance" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-3">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <CheckSquare className="w-5 h-5 text-[#B11226]" />
+            <span>7. Acceptance Criteria Summary</span>
+          </h2>
+          <div className="space-y-1.5">
+            {(prd.acceptanceCriteriaSummary || []).map((ac, idx) => (
+              <div key={idx} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+                <span className="text-emerald-500 font-bold shrink-0 mt-0.5">✓</span>
+                <span>{ac}</span>
+              </div>
+            ))}
+            {(!prd.acceptanceCriteriaSummary || prd.acceptanceCriteriaSummary.length === 0) && (
+              <p className="text-xs text-gray-400 italic">Belum ada acceptance criteria summary.</p>
+            )}
+          </div>
+        </section>
+
+        {/* 13. Architecture & Tech Stack */}
+        <section id="sec-architecture" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Cpu className="w-5 h-5 text-[#B11226]" />
+            <span>13. Architecture & Tech Stack</span>
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {[
+              { label: 'Frontend', value: prd.inputs?.techStack?.frontend },
+              { label: 'Backend', value: prd.inputs?.techStack?.backend },
+              { label: 'Database', value: prd.inputs?.techStack?.database },
+              { label: 'Authentication', value: prd.inputs?.techStack?.authentication },
+              { label: 'Hosting', value: prd.inputs?.techStack?.hosting },
+              { label: 'API Integrations', value: prd.inputs?.techStack?.apiIntegrations },
+            ].map((item, idx) => (
+              item.value ? (
+                <div key={idx} className="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-xs space-y-1">
+                  <span className="font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">{item.label}</span>
+                  <p className="text-gray-900 dark:text-white font-semibold">{item.value}</p>
+                </div>
+              ) : null
+            ))}
+          </div>
+          {!prd.inputs?.techStack && (
+            <p className="text-xs text-gray-400 italic">Belum ada architecture & tech stack.</p>
+          )}
+        </section>
+
+        {/* 14. API Specification */}
         <section id="sec-api" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
             <Code2 className="w-5 h-5 text-[#B11226]" />
-            <span>5. API Specification & Endpoints</span>
+            <span>14. API Specification & Endpoints</span>
           </h2>
 
           <div className="space-y-3">
@@ -880,11 +1109,11 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </section>
 
-        {/* 6. Database Design */}
+        {/* 15. Database Design */}
         <section id="sec-database" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
             <Database className="w-5 h-5 text-[#B11226]" />
-            <span>6. Database Design & ERD Tables</span>
+            <span>15. Database Design & ERD Tables</span>
           </h2>
 
           <div className="grid grid-cols-1 gap-4">
@@ -925,7 +1154,91 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </section>
 
-        {/* 7. Design System & Colors */}
+        {/* 16. Entity Relationship Summary */}
+        <section id="sec-erd-summary" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-3">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Workflow className="w-5 h-5 text-[#B11226]" />
+            <span>16. Entity Relationship Summary</span>
+          </h2>
+          <EditableBlock content={prd.entityRelationshipSummary || ''} onSave={(val) => onUpdatePRD({ ...prd, entityRelationshipSummary: val })} />
+        </section>
+
+        {/* 17. Role Permissions */}
+        <section id="sec-roles" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Lock className="w-5 h-5 text-[#B11226]" />
+            <span>17. Role Permissions</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Role</th>
+                  <th className="p-3">Permissions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(prd.rolePermissions || []).map((rp, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{rp.role}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{(rp.permissions || []).join(', ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 18. Notification Flow */}
+        <section id="sec-notifications" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Bell className="w-5 h-5 text-[#B11226]" />
+            <span>18. Notification Flow</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Event</th>
+                  <th className="p-3">Channel</th>
+                  <th className="p-3">Recipient</th>
+                  <th className="p-3">Template</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(prd.notificationFlow || []).map((nf, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{nf.event}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{nf.channel}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{nf.recipient}</td>
+                    <td className="p-3 text-gray-500 font-mono text-[10px]">{nf.template}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 19. UI Requirements */}
+        <section id="sec-ui" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-3">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Edit3 className="w-5 h-5 text-[#B11226]" />
+            <span>19. UI Requirements</span>
+          </h2>
+          <div className="space-y-1.5">
+            {(prd.uiRequirements || []).map((ui, idx) => (
+              <div key={idx} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+                <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
+                <span>{ui}</span>
+              </div>
+            ))}
+            {(!prd.uiRequirements || prd.uiRequirements.length === 0) && (
+              <p className="text-xs text-gray-400 italic">Belum ada UI requirements.</p>
+            )}
+          </div>
+        </section>
+
+        {/* 20. Design System & Colors */}
         <section id="sec-design" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
             <Edit3 className="w-5 h-5 text-[#B11226]" />
@@ -967,7 +1280,240 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </section>
 
-        {/* 8. Tasks & Release Checklist */}
+        {/* 21. Component List */}
+        <section id="sec-components" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Layers className="w-5 h-5 text-[#B11226]" />
+            <span>21. Component List</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {(prd.componentList || []).map((comp, idx) => (
+              <div key={idx} className="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/70 text-xs space-y-1">
+                <span className="font-bold text-gray-900 dark:text-white text-sm">{comp.name}</span>
+                <p className="text-gray-600 dark:text-gray-400">{comp.purpose}</p>
+                <p className="text-[10px] text-gray-500 font-mono">Props: {comp.props}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 22. Responsive Requirements */}
+        <section id="sec-responsive" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Gauge className="w-5 h-5 text-[#B11226]" />
+            <span>22. Responsive Requirements</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Device</th>
+                  <th className="p-3">Breakpoint</th>
+                  <th className="p-3">Behavior</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(prd.responsiveRequirements || []).map((rr, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{rr.device}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300 font-mono">{rr.breakpoint}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{rr.behavior}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 23. Security & Accessibility */}
+        <section id="sec-security" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <ShieldCheck className="w-5 h-5 text-[#B11226]" />
+            <span>23. Security & Accessibility</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <span className="font-bold text-xs text-gray-900 dark:text-white uppercase tracking-wider">Security Requirements</span>
+              <div className="space-y-1">
+                {(prd.securityRequirements || []).map((sr, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+                    <Lock className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
+                    <span>{sr}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <span className="font-bold text-xs text-gray-900 dark:text-white uppercase tracking-wider">Accessibility Standards</span>
+              <div className="space-y-1">
+                {(prd.accessibilityStandards || []).map((a11y, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
+                    <span>{a11y}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 24. SEO Requirements */}
+        <section id="sec-seo" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-3">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Search className="w-5 h-5 text-[#B11226]" />
+            <span>24. SEO Requirements</span>
+          </h2>
+          <div className="space-y-1.5">
+            {(prd.seoRequirements || []).map((seo, idx) => (
+              <div key={idx} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                <span>{seo}</span>
+              </div>
+            ))}
+            {(!prd.seoRequirements || prd.seoRequirements.length === 0) && (
+              <p className="text-xs text-gray-400 italic">Belum ada SEO requirements.</p>
+            )}
+          </div>
+        </section>
+
+        {/* 25. Analytics Strategy */}
+        <section id="sec-analytics" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Activity className="w-5 h-5 text-[#B11226]" />
+            <span>25. Analytics Strategy</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Event Name</th>
+                  <th className="p-3">Trigger</th>
+                  <th className="p-3">Parameters</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(prd.analyticsStrategy || []).map((ae, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{ae.eventName}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{ae.trigger}</td>
+                    <td className="p-3 text-gray-500 font-mono text-[10px]">{ae.parameters}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 26. Testing Strategy */}
+        <section id="sec-testing" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <CheckCircle2 className="w-5 h-5 text-[#B11226]" />
+            <span>26. Testing Strategy</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Test Type</th>
+                  <th className="p-3">Scope</th>
+                  <th className="p-3">Tools</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(prd.testingStrategy || []).map((ts, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{ts.testType}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{ts.scope}</td>
+                    <td className="p-3 text-gray-500 font-mono text-[10px]">{ts.tools}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 27. Deployment Strategy */}
+        <section id="sec-deployment" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Zap className="w-5 h-5 text-[#B11226]" />
+            <span>27. Deployment Strategy</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Stage</th>
+                  <th className="p-3">Environment</th>
+                  <th className="p-3">CI/CD Pipeline</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(Array.isArray(prd.deploymentStrategy) ? prd.deploymentStrategy : prd.deploymentStrategy ? [prd.deploymentStrategy] : []).map((ds, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{ds.stage}</td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{ds.environment}</td>
+                    <td className="p-3 text-gray-500 font-mono text-[10px]">{ds.ciCdPipeline}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 28. Risk Assessment */}
+        <section id="sec-risk" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <AlertTriangle className="w-5 h-5 text-[#B11226]" />
+            <span>28. Risk Assessment</span>
+          </h2>
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                <tr>
+                  <th className="p-3">Risk</th>
+                  <th className="p-3">Impact</th>
+                  <th className="p-3">Likelihood</th>
+                  <th className="p-3">Mitigation</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {(prd.riskAssessment || []).map((ra, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{ra.risk}</td>
+                    <td className="p-3"><span className={`px-2 py-0.5 rounded text-[10px] font-bold ${ra.impact === 'High' ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400' : ra.impact === 'Medium' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400'}`}>{ra.impact}</span></td>
+                    <td className="p-3"><span className={`px-2 py-0.5 rounded text-[10px] font-bold ${ra.likelihood === 'High' ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400' : ra.likelihood === 'Medium' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400'}`}>{ra.likelihood}</span></td>
+                    <td className="p-3 text-gray-600 dark:text-gray-300">{ra.mitigation}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 29. Future Roadmap */}
+        <section id="sec-roadmap" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Compass className="w-5 h-5 text-[#B11226]" />
+            <span>29. Future Roadmap</span>
+          </h2>
+          <div className="space-y-3">
+            {(prd.futureRoadmap || []).map((phase, idx) => (
+              <div key={idx} className="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/70 text-xs space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-gray-900 dark:text-white text-sm">{phase.phase}</span>
+                  <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 font-bold text-[10px]">{phase.timeframe}</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(phase.deliverables || []).map((d, dIdx) => (
+                    <span key={dIdx} className="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-[10px] font-medium">{d}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 30. Tasks & Release Checklist */}
         <section id="sec-tasks" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
             <CheckCircle2 className="w-5 h-5 text-[#B11226]" />
@@ -1003,7 +1549,40 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </section>
 
-        {/* 11. AI Coding Prompt Block & 1-Click Platform Launchers */}
+        {/* 31. Sprint Planning */}
+        <section id="sec-sprint" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Activity className="w-5 h-5 text-[#B11226]" />
+            <span>31. Sprint Planning</span>
+          </h2>
+          <div className="space-y-3">
+            {(prd.sprintPlanning || []).length > 0 ? (
+              (prd.sprintPlanning || []).map((sprint, idx) => (
+                <div key={idx} className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-gray-900 dark:text-white">{sprint.sprint}</span>
+                    <span className="px-2 py-0.5 rounded bg-[#B11226]/10 text-[#B11226] dark:bg-[#B11226]/20 dark:text-red-400 text-[10px] font-bold">
+                      {sprint.storyPoints} SP
+                    </span>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300 font-semibold">{sprint.focus}</p>
+                  <ul className="space-y-1">
+                    {(sprint.tasks || []).map((task, ti) => (
+                      <li key={ti} className="flex items-start gap-1.5 text-gray-600 dark:text-gray-400">
+                        <span className="text-gray-400">•</span>
+                        <span>{task}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <p className="text-xs text-gray-400 italic">Belum ada sprint planning.</p>
+            )}
+          </div>
+        </section>
+
+        {/* 32. AI Coding Prompt Block & 1-Click Platform Launchers */}
         <section id="sec-prompt" className="p-6 rounded-2xl bg-gray-900 text-gray-100 border border-gray-800 space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-800">
             <div className="flex items-center gap-2.5">
