@@ -31,11 +31,11 @@ export const AdminDashboard: React.FC = () => {
   const [error, setError] = React.useState('');
   const [processingId, setProcessingId] = React.useState<string | null>(null);
   const [editingId, setEditingId] = React.useState<string | null>(null);
-  
-  const [editRole, setEditRole] = React.useState('');
+  const [editRole, setEditRole] = React.useState('User');
   const [editCredits, setEditCredits] = React.useState(0);
-  const [editPlan, setEditPlan] = React.useState('');
-
+  const [editPlan, setEditPlan] = React.useState('Free');
+  const [userToDelete, setUserToDelete] = React.useState<{ id: string, name: string } | null>(null);
+  
   // Toast Notification State
   const [toast, setToast] = React.useState<{ show: boolean, message: string, type: 'success' | 'error' }>({ show: false, message: '', type: 'success' });
 
@@ -200,19 +200,23 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleDeleteUser = async (id: string, name: string) => {
-    if (!window.confirm(`Apakah Anda yakin ingin menghapus user ${name}? Tindakan ini tidak dapat dibatalkan.`)) {
-      return;
-    }
+  const handleDeleteUser = (id: string, name: string) => {
+    setUserToDelete({ id, name });
+  };
+
+  const confirmDeleteUser = async () => {
+    if (!userToDelete) return;
+    const { id, name } = userToDelete;
+    setUserToDelete(null); // Tutup modal langsung
+    
     const { error } = await supabase.rpc('delete_user_by_admin', { target_user_id: id });
     if (error) {
       showToast('Gagal menghapus user: ' + error.message, 'error');
     } else {
-      showToast('User berhasil dihapus!');
+      showToast(`User ${name} berhasil dihapus!`);
       setProfiles(prev => prev.filter(p => p.id !== id));
     }
   };
-
 
   const handleSaveSettings = () => {
     localStorage.setItem('admin_pricing', JSON.stringify(pricing));
@@ -231,6 +235,39 @@ export const AdminDashboard: React.FC = () => {
         }`}>
           {toast.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
           <span className="text-sm font-bold">{toast.message}</span>
+        </div>
+      )}
+
+      {/* Delete User Confirmation Modal */}
+      {userToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 border border-gray-200 dark:border-gray-800">
+            <div className="p-6 text-center space-y-4">
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-2">
+                <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-500" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                Hapus Pengguna?
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Apakah Anda yakin ingin menghapus <strong>{userToDelete.name}</strong>? Tindakan ini permanen dan tidak dapat dibatalkan.
+              </p>
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => setUserToDelete(null)}
+                  className="flex-1 py-2.5 px-4 rounded-xl font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={confirmDeleteUser}
+                  className="flex-1 py-2.5 px-4 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700 transition-colors shadow-lg shadow-red-500/30 cursor-pointer"
+                >
+                  Ya, Hapus
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
