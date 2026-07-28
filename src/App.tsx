@@ -67,9 +67,15 @@ export function App() {
   React.useEffect(() => {
     async function loadData() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-      
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
+      if (!session) {
+        console.warn('No Supabase session found — user may not be logged in.');
+        return;
+      }
+
+      const { data: profile, error: profileErr } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
+      if (profileErr) {
+        console.warn('Failed to load profile:', profileErr.message);
+      }
       if (profile) {
         setUser(prev => prev ? { ...prev, credits: profile.credits, role: profile.role, id: profile.id } : null);
       }
@@ -89,7 +95,10 @@ export function App() {
         })
         .subscribe();
       
-      const { data: dbFolders } = await supabase.from('folders').select('*');
+      const { data: dbFolders, error: foldersErr } = await supabase.from('folders').select('*');
+      if (foldersErr) {
+        console.warn('Failed to load folders:', foldersErr.message);
+      }
       if (dbFolders) {
         setFolders(dbFolders.map(f => ({
           id: f.id,
@@ -99,7 +108,10 @@ export function App() {
         })));
       }
 
-      const { data: dbPrds } = await supabase.from('prds').select('*').order('updated_at', { ascending: false });
+      const { data: dbPrds, error: prdsErr } = await supabase.from('prds').select('*').order('updated_at', { ascending: false });
+      if (prdsErr) {
+        console.warn('Failed to load PRDs:', prdsErr.message);
+      }
       if (dbPrds) {
         setPrds(dbPrds.map(p => ({
           ...p.content,
@@ -125,38 +137,59 @@ export function App() {
 
   // Sync back to Supabase on Update (Auto-save)
   const savePrdToDB = async (prd: PRDDocument) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-    
-    await supabase.from('prds').upsert({
-      id: prd.id,
-      user_id: session.user.id,
-      folder_id: prd.folderId || null,
-      title: prd.title,
-      category: prd.category,
-      platform: prd.platform,
-      complexity: prd.complexity,
-      status: prd.status,
-      version: prd.version,
-      author: prd.author,
-      is_favorite: prd.isFavorite,
-      in_trash: prd.inTrash,
-      tags: prd.tags,
-      content: prd
-    });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        console.warn('savePrdToDB: No session — skipping save.');
+        return;
+      }
+
+      const { error } = await supabase.from('prds').upsert({
+        id: prd.id,
+        user_id: session.user.id,
+        folder_id: prd.folderId || null,
+        title: prd.title,
+        category: prd.category,
+        platform: prd.platform,
+        complexity: prd.complexity,
+        status: prd.status,
+        version: prd.version,
+        author: prd.author,
+        is_favorite: prd.isFavorite,
+        in_trash: prd.inTrash,
+        tags: prd.tags,
+        content: prd,
+        updated_at: new Date().toISOString()
+      });
+      if (error) {
+        console.error('savePrdToDB error:', error.message, error.details);
+      }
+    } catch (err: any) {
+      console.error('savePrdToDB exception:', err.message);
+    }
   };
 
   const saveFolderToDB = async (folder: Folder) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-    
-    await supabase.from('folders').upsert({
-      id: folder.id,
-      user_id: session.user.id,
-      name: folder.name,
-      color: folder.color,
-      icon: folder.icon
-    });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        console.warn('saveFolderToDB: No session — skipping save.');
+        return;
+      }
+
+      const { error } = await supabase.from('folders').upsert({
+        id: folder.id,
+        user_id: session.user.id,
+        name: folder.name,
+        color: folder.color,
+        icon: folder.icon
+      });
+      if (error) {
+        console.error('saveFolderToDB error:', error.message, error.details);
+      }
+    } catch (err: any) {
+      console.error('saveFolderToDB exception:', err.message);
+    }
   };
   const [activePRDId, setActivePRDId] = React.useState<string>(() => {
     return SAMPLE_PRDS[0]?.id || '';
@@ -297,10 +330,9 @@ export function App() {
         ...prdData,
         folderId: input.folderId || filterFolderId || prdData.folderId,
       };
-      
+
       // Simpan ke Supabase Database
-      const { error: dbError } = await supabase.from('prds').insert(newPRD);
-      if (dbError) console.error('Gagal menyimpan ke database:', dbError);
+      await savePrdToDB(newPRD);
 
       setPrds((prev) => [newPRD, ...prev]);
       setActivePRDId(newPRD.id);

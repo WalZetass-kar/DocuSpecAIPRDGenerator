@@ -31,28 +31,34 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, prd }
 
   // Generate Clean Markdown representation of the PRD
   const generateMarkdown = () => {
-    return `# ${prd.title}
-*Category: ${prd.category} | Platform: ${prd.platform} | Version: ${prd.version} | Date: ${new Date(prd.updatedAt).toLocaleDateString()}*
+    const safeGoals = prd.goals || { businessGoals: [], nonGoals: [] };
+    const safeMetrics = prd.successMetrics || [];
+    const safeReqs = prd.functionalRequirements || [];
+    const safeApis = prd.apiSpecification || [];
+    const safeDb = prd.databaseDesign || { tables: [] };
+
+    return `# ${prd.title || 'Untitled PRD'}
+*Category: ${prd.category || '-'} | Platform: ${prd.platform || '-'} | Version: ${prd.version || '-'} | Date: ${prd.updatedAt ? new Date(prd.updatedAt).toLocaleDateString() : '-'}*
 
 ## 1. Executive Summary
-${prd.executiveSummary}
+${prd.executiveSummary || '-'}
 
 ## 2. Problem Statement
-${prd.problemStatement}
+${prd.problemStatement || '-'}
 
 ## 3. Goals & Non-Goals
 ### Business Goals
-${prd.goals?.businessGoals?.map((g) => `- ${g}`).join('\n')}
+${safeGoals.businessGoals?.map((g) => `- ${g}`).join('\n') || '-'}
 
 ### Non-Goals
-${prd.goals?.nonGoals?.map((ng) => `- ${ng}`).join('\n')}
+${safeGoals.nonGoals?.map((ng) => `- ${ng}`).join('\n') || '-'}
 
 ## 4. Success Metrics
-${prd.successMetrics?.map((m) => `| ${m.metric} | Target: ${m.target} | Timeframe: ${m.timeframe} |`).join('\n')}
+${safeMetrics.map((m) => `| ${m.metric} | Target: ${m.target} | Timeframe: ${m.timeframe} |`).join('\n') || '-'}
 
 ## 5. Functional Requirements
-${prd.functionalRequirements
-  ?.map(
+${safeReqs
+  .map(
     (req) => `### ${req.id}: ${req.feature} [Priority: ${req.priority}]
 *User Story*: "${req.userStory}"
 *Acceptance Criteria*:
@@ -67,20 +73,20 @@ ${(Array.isArray(req.acceptanceCriteria)
   .join('\n')}
 
 ## 6. API Specification
-${prd.apiSpecification?.map((api) => `- **${api.method} ${api.endpoint}**: ${api.description}`).join('\n')}
+${safeApis.map((api) => `- **${api.method} ${api.endpoint}**: ${api.description}`).join('\n') || '-'}
 
 ## 7. Database Design
-${prd.databaseDesign?.tables
+${safeDb.tables
   ?.map(
     (t) => `### Table: ${t.name} (${t.description})
 ${t.columns?.map((c) => `- ${c.name} (${c.type}) - ${c.constraints}`).join('\n')}
 `
   )
-  .join('\n')}
+  .join('\n') || '-'}
 
 ## 8. AI Coding Assistant Prompt
 \`\`\`
-${prd.aiCodingPrompt}
+${prd.aiCodingPrompt || '(Belum tersedia)'}
 \`\`\`
 `;
   };
@@ -92,7 +98,7 @@ ${prd.aiCodingPrompt}
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${prd.title.toLowerCase().replace(/\s+/g, '-')}-prd.md`;
+    a.download = `${(prd.title || 'prd').toLowerCase().replace(/\s+/g, '-')}-prd.md`;
     a.click();
   };
 
@@ -102,7 +108,7 @@ ${prd.aiCodingPrompt}
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${prd.title.toLowerCase().replace(/\s+/g, '-')}-prd.json`;
+    a.download = `${(prd.title || 'prd').toLowerCase().replace(/\s+/g, '-')}-prd.json`;
     a.click();
   };
 
@@ -112,13 +118,20 @@ ${prd.aiCodingPrompt}
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${prd.title.toLowerCase().replace(/\s+/g, '-')}-prd.txt`;
+    a.download = `${(prd.title || 'prd').toLowerCase().replace(/\s+/g, '-')}-prd.txt`;
     a.click();
   };
 
   const handleDownloadDOCX = () => {
     const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-    
+    const safeGoals = prd.goals || { businessGoals: [], nonGoals: [] };
+    const safeMetrics = prd.successMetrics || [];
+    const safeReqs = prd.functionalRequirements || [];
+    const safeNfr = prd.nonFunctionalRequirements || [];
+    const safePersonas = prd.userPersonas || [];
+    const safeApis = prd.apiSpecification || [];
+    const safeDb = prd.databaseDesign || { tables: [] };
+
     const htmlContent = `
       <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
       <head>
@@ -195,18 +208,18 @@ ${prd.aiCodingPrompt}
         <!-- 3. GOALS & METRICS -->
         <h1>3. Target Bisnis &amp; Success Metrics</h1>
         <h2>Goal Bisnis</h2>
-        <ul>${prd.goals?.businessGoals?.map(g => `<li>${g}</li>`).join('') || '<li>-</li>'}</ul>
+        <ul>${safeGoals.businessGoals?.map(g => `<li>${g}</li>`).join('') || '<li>-</li>'}</ul>
         <h2>Non-Goals</h2>
-        <ul>${prd.goals?.nonGoals?.map(ng => `<li>${ng}</li>`).join('') || '<li>-</li>'}</ul>
+        <ul>${safeGoals.nonGoals?.map(ng => `<li>${ng}</li>`).join('') || '<li>-</li>'}</ul>
         <h2>Success Metrics (KPIs)</h2>
         <table>
           <tr><th>Metrik KPI</th><th>Target Spesifik</th><th>Waktu Pencapaian</th></tr>
-          ${prd.successMetrics?.map(m => `<tr><td>${m.metric}</td><td>${m.target}</td><td>${m.timeframe}</td></tr>`).join('') || '<tr><td colspan="3">-</td></tr>'}
+          ${safeMetrics.map(m => `<tr><td>${m.metric}</td><td>${m.target}</td><td>${m.timeframe}</td></tr>`).join('') || '<tr><td colspan="3">-</td></tr>'}
         </table>
 
         <!-- 4. FUNCTIONAL REQUIREMENTS -->
         <h1>4. Functional Requirements</h1>
-        ${prd.functionalRequirements?.map(req => `
+        ${safeReqs.map(req => `
           <h3>${req.id}: ${req.feature} <span class="badge-${(req.priority || 'p1').toLowerCase()}">${req.priority}</span></h3>
           <p><em>User Story:</em> "${req.userStory}"</p>
           <p><strong>Acceptance Criteria:</strong></p>
@@ -217,12 +230,12 @@ ${prd.aiCodingPrompt}
         <h1>5. Non-Functional Requirements</h1>
         <table>
           <tr><th>Kategori</th><th>Requirement</th><th>Target</th></tr>
-          ${prd.nonFunctionalRequirements?.map(r => `<tr><td><strong>${r.category}</strong></td><td>${r.requirement}</td><td>${r.target}</td></tr>`).join('') || '<tr><td colspan="3">-</td></tr>'}
+          ${safeNfr.map(r => `<tr><td><strong>${r.category}</strong></td><td>${r.requirement}</td><td>${r.target}</td></tr>`).join('') || '<tr><td colspan="3">-</td></tr>'}
         </table>
 
         <!-- 6. USER PERSONAS -->
         <h1>6. User Personas &amp; Stakeholders</h1>
-        ${prd.userPersonas?.map(p => `
+        ${safePersonas.map(p => `
           <h3>${p.name} — ${p.role}</h3>
           <p><strong>Pain Points:</strong> ${(Array.isArray(p.painPoints) ? p.painPoints : [p.painPoints]).join(', ')}</p>
           <p><strong>Goals:</strong> ${(Array.isArray(p.goals) ? p.goals : [p.goals]).join(', ')}</p>
@@ -232,12 +245,12 @@ ${prd.aiCodingPrompt}
         <h1>7. API Specification</h1>
         <table>
           <tr><th>Method</th><th>Endpoint</th><th>Deskripsi</th></tr>
-          ${prd.apiSpecification?.map(api => `<tr><td><code>${api.method}</code></td><td><code>${api.endpoint}</code></td><td>${api.description}</td></tr>`).join('') || '<tr><td colspan="3">-</td></tr>'}
+          ${safeApis.map(api => `<tr><td><code>${api.method}</code></td><td><code>${api.endpoint}</code></td><td>${api.description}</td></tr>`).join('') || '<tr><td colspan="3">-</td></tr>'}
         </table>
 
         <!-- 8. DATABASE DESIGN -->
         <h1>8. Database Design</h1>
-        ${prd.databaseDesign?.tables?.map(t => `
+        ${safeDb.tables?.map(t => `
           <h3>Tabel: ${t.name}</h3>
           <p>${t.description}</p>
           <table>
@@ -249,7 +262,7 @@ ${prd.aiCodingPrompt}
         <!-- 9. AI CODING PROMPT -->
         <h1>9. AI Coding Assistant Prompt</h1>
         <p>Salin prompt berikut ke Cursor, Windsurf, atau Claude untuk langsung mulai coding:</p>
-        <pre>${prd.aiCodingPrompt || '-'}</pre>
+        <pre>${prd.aiCodingPrompt || '(Belum tersedia)'}</pre>
 
         <hr style="margin-top:48px;border-color:#e5e7eb;" />
         <p style="text-align:center;color:#9ca3af;font-size:9pt;">© ${new Date().getFullYear()} DocuSpec AI — Dokumen ini dibuat secara otomatis oleh AI. Harap tinjau sebelum digunakan secara resmi.</p>
@@ -260,7 +273,7 @@ ${prd.aiCodingPrompt}
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${prd.title.toLowerCase().replace(/\s+/g, '-')}-prd.doc`;
+    a.download = `${(prd.title || 'prd').toLowerCase().replace(/\s+/g, '-')}-prd.doc`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -295,7 +308,7 @@ ${prd.aiCodingPrompt}
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${prd.title.toLowerCase().replace(/\s+/g, '-')}-github-issues.csv`;
+    a.download = `${(prd.title || 'prd').toLowerCase().replace(/\s+/g, '-')}-github-issues.csv`;
     a.click();
   };
 

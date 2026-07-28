@@ -167,23 +167,49 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
   unreadCommentsCount = 0,
   onBackToDashboard,
 }) => {
+  if (!prd) {
+    return (
+      <div className="flex-1 h-full min-h-[500px] flex flex-col items-center justify-center p-12 text-center">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Dokumen PRD tidak ditemukan</h3>
+        <p className="text-xs text-gray-500 dark:text-gray-400">Silakan kembali ke dashboard dan pilih dokumen PRD.</p>
+        {onBackToDashboard && (
+          <button onClick={onBackToDashboard} className="mt-4 px-4 py-2 bg-[#B11226] text-white text-xs font-bold rounded-xl hover:bg-[#7A0C12]">
+            Kembali ke Dashboard
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  const prdGoals = prd.goals || { businessGoals: [], nonGoals: [] };
+  const prdSuccessMetrics = prd.successMetrics || [];
+  const prdFunctionalRequirements = prd.functionalRequirements || [];
+  const prdApiSpecification = prd.apiSpecification || [];
+  const prdDatabaseDesign = prd.databaseDesign || { tables: [] };
+  const prdUserPersonas = prd.userPersonas || [];
+  const prdStakeholders = prd.stakeholders || [];
+  const prdScope = prd.scope || { inScope: [], outOfScope: [] };
+  const prdReleaseChecklist = prd.releaseChecklist || [];
+  const prdInputs: any = prd.inputs || {};
+
   const [showAiInsights, setShowAiInsights] = React.useState(true);
   const [copiedPrompt, setCopiedPrompt] = React.useState(false);
   const [activeTabSection, setActiveTabSection] = React.useState('sec-summary');
   const [isEditingTitle, setIsEditingTitle] = React.useState(false);
-  const [titleInput, setTitleInput] = React.useState(prd.title);
+  const [titleInput, setTitleInput] = React.useState(prd.title || '');
   const [aiRefineDrawerOpen, setAiRefineDrawerOpen] = React.useState(false);
   const [aiActionLoading, setAiActionLoading] = React.useState(false);
   const [aiAnalysisOutput, setAiAnalysisOutput] = React.useState<any>(null);
   const [customAIChatMsg, setCustomAIChatMsg] = React.useState('');
   const [chatHistory, setChatHistory] = React.useState<{ role: 'user' | 'assistant'; text: string }[]>([]);
   const [tocSearchQuery, setTocSearchQuery] = React.useState('');
+  const [errorText, setErrorText] = React.useState('');
 
   // Local checklist state for release checklist
-  const [checklistItems, setChecklistItems] = React.useState(prd.releaseChecklist || []);
+  const [checklistItems, setChecklistItems] = React.useState(prdReleaseChecklist);
 
   React.useEffect(() => {
-    setTitleInput(prd.title);
+    setTitleInput(prd.title || '');
     setChecklistItems(prd.releaseChecklist || []);
   }, [prd.id, prd.title]);
 
@@ -262,8 +288,6 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
       setAiActionLoading(false);
     }
   };
-
-  const [errorText, setErrorText] = React.useState('');
 
   const sectionsList = [
     { id: 'sec-summary', label: '1. Executive Summary', icon: FileText },
@@ -551,8 +575,8 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
                 Solusi Produk (Solution)
               </span>
               <EditableBlock 
-                content={prd.inputs.solution || 'Solusi terintegrasi terstruktur.'} 
-                onSave={(val) => onUpdatePRD({ ...prd, inputs: { ...prd.inputs, solution: val } })} 
+                content={prdInputs.solution || 'Solusi terintegrasi terstruktur.'}
+                onSave={(val) => onUpdatePRD({ ...prd, inputs: { ...prdInputs, solution: val } })} 
               />
             </div>
           </div>
@@ -569,7 +593,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
             <div className="space-y-2">
               <span className="font-bold text-gray-900 dark:text-white">Goal Bisnis Utama</span>
               <ul className="space-y-1.5">
-                {prd.goals?.businessGoals?.map((g, idx) => (
+                {prdGoals.businessGoals?.map((g, idx) => (
                   <li key={idx} className="flex items-start gap-2 text-gray-700 dark:text-gray-300">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                     <span>{g}</span>
@@ -581,7 +605,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
             <div className="space-y-2">
               <span className="font-bold text-gray-900 dark:text-white">Non-Goals (Di Luar Fokus)</span>
               <ul className="space-y-1.5">
-                {prd.goals?.nonGoals?.map((ng, idx) => (
+                {prdGoals.nonGoals?.map((ng, idx) => (
                   <li key={idx} className="flex items-start gap-2 text-gray-500 dark:text-gray-400">
                     <span className="w-1.5 h-1.5 rounded-full bg-gray-400 shrink-0 mt-1.5" />
                     <span>{ng}</span>
@@ -606,7 +630,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                  {prd.successMetrics?.map((m, idx) => (
+                  {prdSuccessMetrics.map((m, idx) => (
                     <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
                       <td className="p-3 font-semibold text-gray-900 dark:text-white">{m.metric}</td>
                       <td className="p-3 text-emerald-600 dark:text-emerald-400 font-mono font-bold">{m.target}</td>
@@ -627,7 +651,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            {prd.userPersonas?.map((persona, idx) => (
+            {prdUserPersonas.map((persona, idx) => (
               <div key={idx} className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/70 space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-full bg-[#B11226] text-white flex items-center justify-center font-bold text-xs">
@@ -650,7 +674,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
             ))}
           </div>
 
-          {prd.stakeholders && prd.stakeholders.length > 0 && (
+          {prdStakeholders.length > 0 && (
             <div className="pt-2">
               <span className="font-bold text-xs text-gray-900 dark:text-white mb-2 block">Matriks Stakeholder</span>
               <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
@@ -663,7 +687,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                    {prd.stakeholders.map((sh, idx) => (
+                    {prdStakeholders.map((sh, idx) => (
                       <tr key={idx}>
                         <td className="p-2.5 font-semibold text-gray-900 dark:text-white">{sh.role}</td>
                         <td className="p-2.5 text-gray-600 dark:text-gray-300">{sh.responsibility}</td>
@@ -690,7 +714,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
                 ✓ Fitur Dalam Cakupan (In-Scope v1)
               </span>
               <ul className="space-y-1">
-                {prd.scope?.inScope?.map((item, idx) => (
+                {prdScope.inScope?.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-1.5 text-gray-800 dark:text-gray-200">
                     <span className="text-emerald-500 font-bold">✓</span>
                     <span>{item}</span>
@@ -704,7 +728,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
                 ✕ Di Luar Cakupan (Out of Scope v1)
               </span>
               <ul className="space-y-1">
-                {prd.scope?.outOfScope?.map((item, idx) => (
+                {prdScope.outOfScope?.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-1.5 text-gray-500 dark:text-gray-400">
                     <span>✕</span>
                     <span>{item}</span>
@@ -723,12 +747,12 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
               <span>4. Functional Requirements & Acceptance Criteria</span>
             </h2>
             <span className="text-xs font-mono font-bold text-gray-400">
-              {prd.functionalRequirements?.length || 0} Stories
+              {prdFunctionalRequirements.length} Stories
             </span>
           </div>
 
           <div className="space-y-4">
-            {prd.functionalRequirements?.map((req: UserStoryItem, idx) => (
+            {prdFunctionalRequirements.map((req: UserStoryItem, idx) => (
               <div
                 key={req.id || idx}
                 className="p-4 rounded-xl bg-gray-50/70 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/70 space-y-3 text-xs"
@@ -788,7 +812,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </h2>
 
           <div className="space-y-3">
-            {prd.apiSpecification?.map((api, idx) => (
+            {prdApiSpecification.map((api, idx) => (
               <div
                 key={idx}
                 className="p-4 rounded-xl bg-gray-900 text-gray-100 border border-gray-800 font-mono text-xs space-y-2"
@@ -832,7 +856,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </h2>
 
           <div className="grid grid-cols-1 gap-4">
-            {prd.databaseDesign?.tables?.map((tbl, idx) => (
+            {prdDatabaseDesign.tables?.map((tbl, idx) => (
               <div
                 key={idx}
                 className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/70 space-y-2 text-xs"
