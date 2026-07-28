@@ -31,6 +31,12 @@ import {
   Wand2,
   ArrowUpRight,
   Filter,
+  Users,
+  Compass,
+  CheckSquare,
+  Search,
+  Gauge,
+  Workflow
 } from 'lucide-react';
 import { PRDDocument, Folder, PRDStatus, UserStoryItem, TaskItem } from '../types';
 import { AIInsightsPanel } from './AIInsightsPanel';
@@ -171,6 +177,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
   const [aiAnalysisOutput, setAiAnalysisOutput] = React.useState<any>(null);
   const [customAIChatMsg, setCustomAIChatMsg] = React.useState('');
   const [chatHistory, setChatHistory] = React.useState<{ role: 'user' | 'assistant'; text: string }[]>([]);
+  const [tocSearchQuery, setTocSearchQuery] = React.useState('');
 
   // Local checklist state for release checklist
   const [checklistItems, setChecklistItems] = React.useState(prd.releaseChecklist || []);
@@ -262,15 +269,25 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
     { id: 'sec-summary', label: '1. Executive Summary', icon: FileText },
     { id: 'sec-problem', label: '2. Problem & Solution', icon: AlertTriangle },
     { id: 'sec-goals', label: '3. Goals & Metrics', icon: Activity },
-    { id: 'sec-functional', label: '4. Functional Req (User Stories)', icon: ListOrdered },
-    { id: 'sec-architecture', label: '5. Architecture & Tech Stack', icon: Layers },
-    { id: 'sec-api', label: '6. API Specification', icon: Code2 },
-    { id: 'sec-database', label: '7. Database Schema (ERD)', icon: Database },
-    { id: 'sec-design', label: '8. Design System & UI', icon: Edit3 },
-    { id: 'sec-security', label: '9. Security & Accessibility', icon: ShieldCheck },
-    { id: 'sec-tasks', label: '10. Task Backlog & Release', icon: CheckCircle2 },
-    { id: 'sec-prompt', label: '11. AI Coding Prompt', icon: Terminal },
+    { id: 'sec-personas', label: '4. User Personas & Stakeholders', icon: Users },
+    { id: 'sec-journey', label: '5. User Journey & Scope', icon: Compass },
+    { id: 'sec-functional', label: '6. Functional Req (User Stories)', icon: ListOrdered },
+    { id: 'sec-architecture', label: '7. Architecture & Tech Stack', icon: Layers },
+    { id: 'sec-api', label: '8. API Specification', icon: Code2 },
+    { id: 'sec-database', label: '9. Database Schema (ERD)', icon: Database },
+    { id: 'sec-design', label: '10. Design System & UI', icon: Edit3 },
+    { id: 'sec-security', label: '11. Security & Accessibility', icon: ShieldCheck },
+    { id: 'sec-tasks', label: '12. Task Backlog & Release', icon: CheckCircle2 },
+    { id: 'sec-prompt', label: '13. AI Coding Prompt', icon: Terminal },
   ];
+
+  const filteredSections = sectionsList.filter(s => 
+    s.label.toLowerCase().includes(tocSearchQuery.toLowerCase())
+  );
+
+  const completedChecklistCount = checklistItems.filter(c => c.status === 'completed').length;
+  const totalChecklistCount = checklistItems.length || 1;
+  const releaseProgressPct = Math.round((completedChecklistCount / totalChecklistCount) * 100);
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#F8F9FA] dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans z-40 fixed inset-0">
@@ -598,6 +615,102 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        </section>
+
+        {/* 4. User Personas & Stakeholders */}
+        <section id="sec-personas" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Users className="w-5 h-5 text-[#B11226]" />
+            <span>4. User Personas & Stakeholders</span>
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            {prd.userPersonas?.map((persona, idx) => (
+              <div key={idx} className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/70 space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-[#B11226] text-white flex items-center justify-center font-bold text-xs">
+                    {persona.name ? persona.name.charAt(0) : 'U'}
+                  </div>
+                  <div>
+                    <span className="font-bold text-gray-900 dark:text-white text-sm block">{persona.name || 'User Persona'}</span>
+                    <span className="text-[10px] text-gray-500">{persona.role}</span>
+                  </div>
+                </div>
+                <div className="space-y-1 pt-1">
+                  <span className="font-bold text-gray-700 dark:text-gray-300 text-[10px] uppercase">Pain Points:</span>
+                  <p className="text-red-600 dark:text-red-400 text-[11px] leading-relaxed">{Array.isArray(persona.painPoints) ? persona.painPoints.join(', ') : persona.painPoints}</p>
+                </div>
+                <div className="space-y-1">
+                  <span className="font-bold text-gray-700 dark:text-gray-300 text-[10px] uppercase">Goals:</span>
+                  <p className="text-emerald-600 dark:text-emerald-400 text-[11px] leading-relaxed">{Array.isArray(persona.goals) ? persona.goals.join(', ') : persona.goals}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {prd.stakeholders && prd.stakeholders.length > 0 && (
+            <div className="pt-2">
+              <span className="font-bold text-xs text-gray-900 dark:text-white mb-2 block">Matriks Stakeholder</span>
+              <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                    <tr>
+                      <th className="p-2.5">Peran</th>
+                      <th className="p-2.5">Tanggung Jawab</th>
+                      <th className="p-2.5">Dampak</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                    {prd.stakeholders.map((sh, idx) => (
+                      <tr key={idx}>
+                        <td className="p-2.5 font-semibold text-gray-900 dark:text-white">{sh.role}</td>
+                        <td className="p-2.5 text-gray-600 dark:text-gray-300">{sh.responsibility}</td>
+                        <td className="p-2.5"><span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 font-bold text-[10px]">{sh.impact}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* 5. User Journey & Scope */}
+        <section id="sec-journey" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <Compass className="w-5 h-5 text-[#B11226]" />
+            <span>5. User Journey & Product Scope</span>
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div className="p-4 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 space-y-2">
+              <span className="font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider text-[10px] flex items-center gap-1">
+                ✓ Fitur Dalam Cakupan (In-Scope v1)
+              </span>
+              <ul className="space-y-1">
+                {prd.scope?.inScope?.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-1.5 text-gray-800 dark:text-gray-200">
+                    <span className="text-emerald-500 font-bold">✓</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 space-y-2">
+              <span className="font-bold text-gray-500 uppercase tracking-wider text-[10px] flex items-center gap-1">
+                ✕ Di Luar Cakupan (Out of Scope v1)
+              </span>
+              <ul className="space-y-1">
+                {prd.scope?.outOfScope?.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-1.5 text-gray-500 dark:text-gray-400">
+                    <span>✕</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>

@@ -10,12 +10,13 @@ const getApiKey = () => {
   ).trim();
 };
 
-export async function checkAndDeductCredits(): Promise<boolean> {
+export async function checkAndDeductCredits(amount: number = 1): Promise<boolean> {
   try {
-    const { data, error } = await supabase.rpc('decrement_credits');
+    const { data, error } = await supabase.rpc('decrement_credits', { amount_to_deduct: amount });
     if (error) {
       console.warn('Credits check skipped/failed:', error.message);
-      return true; // Don't block user if RPC is missing
+      const { data: data2 } = await supabase.rpc('decrement_credits');
+      return data2 === true || data2 === null;
     }
     return data === true || data === null;
   } catch (e) {
@@ -23,9 +24,9 @@ export async function checkAndDeductCredits(): Promise<boolean> {
   }
 }
 
-async function callGemini(promptText: string, systemInstruction: string, expectJson = false): Promise<string> {
-  // Deduct credits if possible
-  await checkAndDeductCredits();
+async function callGemini(promptText: string, systemInstruction: string, expectJson = false, creditAmount: number = 1): Promise<string> {
+  // Deduct credits if possible (e.g., 36 credits for full PRD generation)
+  await checkAndDeductCredits(creditAmount);
 
   const apiKey = getApiKey();
   
@@ -169,7 +170,7 @@ Tech Stack:
   - APIs: ${prdInputs.techStack?.apiIntegrations}
 Additional Instructions: ${prdInputs.additionalPrompt || 'None'}`;
 
-  const rawText = await callGemini(promptText, systemInstruction, true);
+  const rawText = await callGemini(promptText, systemInstruction, true, 36);
   
   const defaultPRDFallback: Partial<PRDDocument> = {
     executiveSummary: prdInputs.problemStatement || 'PRD otomatis dibuat berdasarkan spesifikasi awal.',

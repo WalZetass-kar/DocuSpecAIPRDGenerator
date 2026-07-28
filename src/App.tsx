@@ -304,6 +304,7 @@ export function App() {
 
       setPrds((prev) => [newPRD, ...prev]);
       setActivePRDId(newPRD.id);
+      setUser((prev) => (prev ? { ...prev, credits: Math.max(0, (prev.credits || 0) - 36) } : null));
       setCurrentView('editor');
     } catch (err: any) {
       console.error('Error generating PRD:', err);
