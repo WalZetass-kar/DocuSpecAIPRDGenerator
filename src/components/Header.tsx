@@ -161,6 +161,21 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
+      {/* Middle Navigation (Landing Page Only) */}
+      {!user && (
+        <div className="hidden md:flex items-center justify-center absolute left-1/2 -translate-x-1/2 gap-8 text-[13px] font-bold text-gray-600 dark:text-gray-300">
+          <button onClick={() => onViewChange('landing')} className="hover:text-[#B11226] transition-colors cursor-pointer">
+            Beranda
+          </button>
+          <button onClick={() => onViewChange('templates')} className="hover:text-[#B11226] transition-colors cursor-pointer">
+            Fitur & Template
+          </button>
+          <a href="https://github.com/WalZetass-kar/DocuSpecAIPRDGenerator" target="_blank" rel="noopener noreferrer" className="hover:text-[#B11226] transition-colors cursor-pointer">
+            GitHub
+          </a>
+        </div>
+      )}
+
       {/* Right Header Controls */}
       <div className="flex items-center gap-1.5 sm:gap-3">
         {user ? (
