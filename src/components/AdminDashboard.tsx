@@ -1,6 +1,6 @@
 import React from 'react';
 import { supabase } from '../lib/supabase';
-import { ShieldCheck, Edit2, CheckCircle2, AlertCircle, RefreshCw, Users, Settings, Wallet, CreditCard, Save, Receipt, Check, X, Upload } from 'lucide-react';
+import { ShieldCheck, Edit2, CheckCircle2, AlertCircle, RefreshCw, Users, Settings, Wallet, CreditCard, Save, Receipt, Check, X, Upload, Trash2 } from 'lucide-react';
 
 interface UserProfile {
   id: string;
@@ -200,6 +200,20 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleDeleteUser = async (id: string, name: string) => {
+    if (!window.confirm(`Apakah Anda yakin ingin menghapus user ${name}? Tindakan ini tidak dapat dibatalkan.`)) {
+      return;
+    }
+    const { error } = await supabase.rpc('delete_user_by_admin', { target_user_id: id });
+    if (error) {
+      showToast('Gagal menghapus user: ' + error.message, 'error');
+    } else {
+      showToast('User berhasil dihapus!');
+      setProfiles(prev => prev.filter(p => p.id !== id));
+    }
+  };
+
+
   const handleSaveSettings = () => {
     localStorage.setItem('admin_pricing', JSON.stringify(pricing));
     localStorage.setItem('admin_payments', JSON.stringify(payments));
@@ -351,13 +365,20 @@ export const AdminDashboard: React.FC = () => {
                         <td className="p-4 font-mono font-bold text-gray-800 dark:text-gray-200">
                           {p.credits ?? 10}
                         </td>
-                        <td className="p-4 text-right">
+                        <td className="p-4 text-right flex items-center justify-end gap-2">
                           <button 
                             onClick={() => handleEditClick(p)}
                             className="p-2 text-gray-400 hover:text-[#B11226] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors cursor-pointer"
                             title="Edit User"
                           >
                             <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteUser(p.id, p.name)}
+                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors cursor-pointer"
+                            title="Hapus User"
+                          >
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </td>
                       </>
