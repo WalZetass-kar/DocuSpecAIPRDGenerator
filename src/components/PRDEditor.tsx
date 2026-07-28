@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   ChevronRight,
+  ChevronLeft,
   Terminal,
   Cpu,
   Lock,
@@ -145,6 +146,7 @@ interface PRDEditorProps {
   onOpenComments: () => void;
   onDuplicatePRD: (prd: PRDDocument) => void;
   unreadCommentsCount?: number;
+  onBackToDashboard?: () => void;
 }
 
 export const PRDEditor: React.FC<PRDEditorProps> = ({
@@ -157,6 +159,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
   onOpenComments,
   onDuplicatePRD,
   unreadCommentsCount = 0,
+  onBackToDashboard,
 }) => {
   const [showAiInsights, setShowAiInsights] = React.useState(true);
   const [copiedPrompt, setCopiedPrompt] = React.useState(false);
@@ -270,14 +273,63 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
   ];
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)] w-full max-w-full min-w-0 overflow-x-hidden bg-[#FAFAFA] dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
-      {/* Left TOC Navigator Sidebar */}
-      <aside className="w-full lg:w-56 xl:w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 p-4 shrink-0 space-y-4 min-w-0">
-        <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
-          Daftar Seksi PRD (36 Poin)
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#F8F9FA] dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans z-40 fixed inset-0">
+      {/* Dedicated Document Studio Top Bar */}
+      <header className="h-14 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 flex items-center justify-between shrink-0 z-30 shadow-xs">
+        {/* Left: Back Button & Document Breadcrumb */}
+        <div className="flex items-center gap-3 min-w-0">
+          {onBackToDashboard && (
+            <button
+              onClick={onBackToDashboard}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-bold transition-all cursor-pointer shrink-0"
+            >
+              <ChevronLeft className="w-4 h-4 text-gray-500" />
+              <span>Kembali ke Dashboard</span>
+            </button>
+          )}
+          <div className="h-4 w-px bg-gray-200 dark:bg-gray-800 hidden sm:block shrink-0" />
+          <div className="flex items-center gap-2 min-w-0 truncate">
+            <span className="text-xs text-gray-400 font-bold hidden md:inline">Studio Editor /</span>
+            <span className="text-xs font-extrabold text-gray-900 dark:text-white truncate max-w-[180px] sm:max-w-xs">{prd.title}</span>
+          </div>
+          {getStatusBadge(prd.status)}
         </div>
 
-        <nav className="space-y-1 text-xs font-medium">
+        {/* Right: Studio Quick Actions */}
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => setAiRefineDrawerOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#B11226] to-[#7A0C12] text-white text-xs font-bold shadow-sm shadow-[#B11226]/20 hover:opacity-95 transition-all cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">AI Assistant & Refine</span>
+          </button>
+          <button
+            onClick={onOpenExportModal}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold transition-all cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Ekspor</span>
+          </button>
+          <button
+            onClick={onOpenShareModal}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold transition-all cursor-pointer"
+          >
+            <Share2 className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Bagikan</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Editor Body: Left TOC Sidebar + Center Document Canvas */}
+      <div className="flex flex-1 min-h-0 w-full overflow-hidden">
+        {/* Left TOC Navigator Sidebar */}
+        <aside className="w-full lg:w-60 xl:w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 p-4 shrink-0 space-y-4 min-w-0 overflow-y-auto custom-scrollbar">
+          <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+            Daftar Seksi PRD (36 Poin)
+          </div>
+
+          <nav className="space-y-1 text-xs font-medium">
           {sectionsList.map((sec) => {
             const Icon = sec.icon;
             const isActive = activeTabSection === sec.id;
@@ -1020,6 +1072,7 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

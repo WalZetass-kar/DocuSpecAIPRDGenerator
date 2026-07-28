@@ -529,6 +529,7 @@ export function App() {
                     onOpenComments={() => setIsCommentsOpen(true)}
                     onDuplicatePRD={handleDuplicatePRD}
                     unreadCommentsCount={activePRD.comments?.filter((c) => !c.resolved).length || 0}
+                    onBackToDashboard={() => setCurrentView('dashboard')}
                   />
                 ) : (
                   <div className="flex-1 h-full min-h-[500px] flex flex-col items-center justify-center p-12 text-center">
