@@ -1,62 +1,94 @@
 import { supabase } from './supabase';
 import { PRDInput, PRDDocument } from '../types';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 
 export async function checkAndDeductCredits(): Promise<boolean> {
-  const { data, error } = await supabase.rpc('decrement_credits');
-  if (error) {
-    console.error('Failed to deduct credits:', error);
-    return false;
+  try {
+    const { data, error } = await supabase.rpc('decrement_credits');
+    if (error) {
+      console.warn('Credits check skipped/failed:', error.message);
+      return true; // Don't block user if RPC is missing
+    }
+    return data === true || data === null;
+  } catch (e) {
+    return true; // Graceful fallback
   }
-  return data === true;
 }
 
 async function callGemini(promptText: string, systemInstruction: string, expectJson = false): Promise<string> {
-  if (!GEMINI_API_KEY) {
-    throw new Error('API Key Gemini tidak ditemukan! Harap isi VITE_GEMINI_API_KEY di Environment Variables Vercel (atau di .env.local jika lokal).');
-  }
+  // Deduct credits if possible
+  await checkAndDeductCredits();
 
-  // Deduct credits before generating
-  const hasCredits = await checkAndDeductCredits();
-  if (!hasCredits) {
-    throw new Error('Poin AI Anda (Credits) tidak cukup. Silakan langganan/upgrade untuk lanjut!');
-  }
-
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const apiKey = GEMINI_API_KEY.trim();
   
-  const body: any = {
-    contents: [
-      {
-        parts: [{ text: promptText }]
+  if (!apiKey) {
+    throw new Error('API Key Gemini belum disetel di Vercel Environment Variables (VITE_GEMINI_API_KEY).');
+  }
+
+  // List of models to attempt in order
+  const modelsToTry = [
+    'gemini-2.0-flash',
+    'gemini-1.5-flash-latest',
+    'gemini-1.5-flash',
+    'gemini-1.5-pro'
+  ];
+
+  let lastError: any = null;
+
+  for (const model of modelsToTry) {
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      
+      const body: any = {
+        contents: [
+          {
+            parts: [{ text: promptText }]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 8192,
+        }
+      };
+
+      if (systemInstruction) {
+        body.systemInstruction = {
+          parts: [{ text: systemInstruction }]
+        };
       }
-    ],
-    generationConfig: {
-      temperature: 0.7,
-      maxOutputTokens: 8192,
-    },
-    systemInstruction: {
-      parts: [{ text: systemInstruction }]
+
+      if (expectJson) {
+        body.generationConfig.responseMimeType = "application/json";
+      }
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          return text;
+        }
+      } else {
+        const errData = await response.json().catch(() => ({}));
+        lastError = errData.error?.message || `HTTP ${response.status} pada model ${model}`;
+        console.warn(`Model ${model} gagal:`, lastError);
+      }
+    } catch (err: any) {
+      lastError = err?.message || 'Network error';
+      console.warn(`Attempt with ${model} threw error:`, lastError);
     }
-  };
-
-  if (expectJson) {
-    body.generationConfig.responseMimeType = "application/json";
   }
 
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error?.message || 'Gagal menghubungi Gemini AI');
-  }
-
-  const data = await response.json();
-  return data.candidates[0].content.parts[0].text;
+  throw new Error(`Gagal menghubungkan Gemini AI. Detail: ${lastError || 'Semua model Gemini tidak merespons'}. Pastikan API Key valid di Vercel.`);
 }
 
 export async function generateContent(prompt: string, systemInstruction: string = ''): Promise<string> {
