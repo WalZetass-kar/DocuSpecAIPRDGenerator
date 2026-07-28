@@ -187,7 +187,6 @@ Additional Instructions: ${prdInputs.additionalPrompt || 'None'}`;
         acceptanceCriteria: ['Given user membuka aplikasi, When mengklik tombol utama, Then sistem merespons cepat.']
       }
     ],
-    techStack: prdInputs.techStack || { frontend: 'React', backend: 'Node.js', database: 'Supabase', authentication: 'Supabase Auth', hosting: 'Vercel', apiIntegrations: 'Gemini AI' },
     aiCodingPrompt: `Buatkan aplikasi ${prdInputs.projectName} dengan spesifikasi: ${prdInputs.mainFeatures}`
   };
 
