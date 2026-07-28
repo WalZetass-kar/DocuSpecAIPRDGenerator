@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Semantic Color Tokens (Light Mode) */
+    --color-bg-base: #f9fafb;
+    --color-bg-card: #ffffff;
+    --color-bg-subtle: #f3f4f6;
+    --color-border: #e5e7eb;
+    --color-border-hover: #d1d5db;
+    --color-text-heading: #111827;
+    --color-text-body: #374151;
+    --color-text-muted: #6b7280;
+    --color-text-subtle: #9ca3af;
+    --color-brand-primary: #B11226;
+    --color-brand-primary-hover: #7A0C12;
+  }
+
+  .dark {
+    /* Semantic Color Tokens (Dark Mode) */
+    --color-bg-base: #030712;
+    --color-bg-card: #111827;
+    --color-bg-subtle: #1f2937;
+    --color-border: #1f2937;
+    --color-border-hover: #374151;
+    --color-text-heading: #f9fafb;
+    --color-text-body: #e5e7eb;
+    --color-text-muted: #9ca3af;
+    --color-text-subtle: #6b7280;
+    --color-brand-primary: #B11226;
+    --color-brand-primary-hover: #900d1e;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    letter-spacing: -0.011em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background-color: var(--color-bg-base);
+    color: var(--color-text-heading);
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* Custom minimal scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.6);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.4);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.7);
+}
+
+/* Slide in keyframe */
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-left {
+  animation: slideLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Focus Ring */
+*:focus-visible {
+  outline: 2px solid #B11226;
+  outline-offset: 2px;
+}
+
+/* AI Chat Markdown Styling */
+.markdown-chat {
+  word-break: break-word;
+}
+.markdown-chat p {
+  margin-bottom: 0.75rem;
+}
+.markdown-chat p:last-child {
+  margin-bottom: 0;
+}
+.markdown-chat strong {
+  font-weight: 700;
+}
+.markdown-chat ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.markdown-chat ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.markdown-chat li {
+  margin-bottom: 0.25rem;
+}
+.markdown-chat code {
+  background-color: rgba(150, 150, 150, 0.2);
+  padding: 0.15rem 0.3rem;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+.markdown-chat pre {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 0.75rem;
+}
+.markdown-chat pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+/* Print CSS */
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  /* Hide UI elements */
+  .no-print, nav, header, aside, button:not(.print-allow), .export-modal-overlay {
+    display: none !important;
+  }
+
+  /* Make the PRD editor fill the page */
+  main, .prd-content, .print-container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Typography for print */
+  h1, h2, h3, h4, h5 {
+    color: #000 !important;
+    page-break-after: avoid;
+  }
+  
+  h2 {
+    border-bottom: 2px solid #B11226;
+    padding-bottom: 4px;
+    margin-top: 24px;
+  }
+
+  p, li, table {
+    color: #333 !important;
+    page-break-inside: avoid;
+  }
+
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  th, td {
+    border: 1px solid #ccc !important;
+    padding: 8px !important;
+  }
+  
+  th {
+    background-color: #f3f4f6 !important;
+  }
+}
