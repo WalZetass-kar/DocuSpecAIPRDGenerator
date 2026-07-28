@@ -297,7 +297,7 @@ Custom Prompt: ${customPrompt || 'None'}
 Execute the requested action perfectly in Indonesian language.`;
 
   const rawText = await callGemini(promptText, systemInstruction, true);
-  const fallback = {
+  const fallback: { summary: string; generatedOutput: string; updatedSections?: Record<string, any> } = {
     summary: 'Refinemen otomatis telah diproses.',
     generatedOutput: `Analisis untuk ${action}: Dokumen PRD telah ditinjau dan dioptimalkan.`
   };
