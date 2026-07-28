@@ -34,11 +34,13 @@ async function callGemini(promptText: string, systemInstruction: string, expectJ
     throw new Error('API Key Gemini belum disetel di Vercel Environment Variables (VITE_GEMINI_API_KEY).');
   }
 
-  // List of valid API models to attempt in order
+  // List of valid API models to attempt in order (most likely to have free quota first)
   const modelsToTry = [
-    'gemini-flash-latest',
     'gemini-2.0-flash',
     'gemini-2.0-flash-lite',
+    'gemini-1.5-flash',
+    'gemini-1.5-pro',
+    'gemini-flash-latest',
     'gemini-pro-latest'
   ];
 
@@ -96,6 +98,10 @@ async function callGemini(promptText: string, systemInstruction: string, expectJ
     }
   }
 
+  // Provide more helpful error messages
+  if (lastError && (lastError.includes('quota') || lastError.includes('Quota') || lastError.includes('429'))) {
+    throw new Error('Quota Gemini API free tier sudah habis. Opsi: (1) Tunggu 24 jam untuk reset, (2) Upgrade ke paid plan di https://ai.google.dev/pricing, (3) Gunakan API key baru.');
+  }
   throw new Error(`Gagal menghubungkan Gemini AI. Detail: ${lastError || 'Semua model Gemini tidak merespons'}. Pastikan API Key valid di Vercel.`);
 }
 
