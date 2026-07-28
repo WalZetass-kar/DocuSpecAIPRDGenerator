@@ -23,7 +23,7 @@ import { GuideModal } from './components/GuideModal';
 import { UpgradeModal } from './components/UpgradeModal';
 import { AIAssistantModal } from './components/AIAssistantModal';
 import { CreateFolderModal } from './components/CreateFolderModal';
-import { Bot, Bell } from 'lucide-react';
+import { Bot, Bell, X, CheckCircle2 } from 'lucide-react';
 import { supabase } from './lib/supabase';
 
 import { AdminDashboard } from './components/AdminDashboard';
@@ -440,6 +440,7 @@ export function App() {
           }}
           onOpenGuideModal={() => setIsGuideModalOpen(true)}
           onOpenTeamModal={() => setIsTeamModalOpen(true)}
+          onOpenUpgradeModal={() => setIsUpgradeModalOpen(true)}
           onViewChange={setCurrentView}
         />
       ) : (
@@ -657,20 +658,6 @@ export function App() {
         activePRD={activePRD}
       />
 
-      {/* Floating AI Assistant Trigger Button */}
-      {user && (
-        <button
-          onClick={() => setIsAIAssistantOpen(true)}
-          className="fixed bottom-5 right-5 z-40 p-3.5 bg-[#B11226] hover:bg-[#7A0C12] text-white rounded-2xl shadow-xl shadow-[#B11226]/30 flex items-center gap-2.5 transition-all hover:scale-105 active:scale-95 cursor-pointer font-bold text-xs"
-          title="Buka AI Assistant"
-        >
-          <div className="relative">
-            <Bot className="w-5 h-5 text-white" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#B11226]" />
-          </div>
-          <span className="hidden sm:inline">Tanya AI Assistant</span>
-        </button>
-      )}
 
       {activePRD && (
         <>

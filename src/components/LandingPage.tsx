@@ -34,6 +34,7 @@ interface LandingPageProps {
   onOpenGuideModal?: () => void;
   onOpenTeamModal?: () => void;
   onViewChange?: (view: 'dashboard' | 'editor' | 'templates' | 'landing') => void;
+  onOpenUpgradeModal?: () => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
@@ -43,6 +44,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onViewTemplates,
   onOpenGuideModal,
   onOpenTeamModal,
+  onOpenUpgradeModal,
   onViewChange,
 }) => {
   const getAdminPricing = () => {
@@ -409,7 +411,7 @@ Response: 200 OK { prdDocument }`}
                 <li className="flex gap-2"><Check className="w-5 h-5 text-[#B11226] shrink-0" /> Auto-Generate AI PRD Lengkap</li>
                 <li className="flex gap-2"><Check className="w-5 h-5 text-[#B11226] shrink-0" /> {proCredits} Poin AI (Credits)</li>
               </ul>
-              <button onClick={onOpenNewPRDModal} className="w-full py-3 bg-[#B11226] text-white font-bold rounded-xl hover:bg-[#900E1F] transition-colors">
+              <button onClick={onOpenUpgradeModal || onOpenNewPRDModal} className="w-full py-3 bg-[#B11226] text-white font-bold rounded-xl hover:bg-[#900E1F] transition-colors">
                 Mulai Sekarang
               </button>
             </div>
@@ -425,7 +427,7 @@ Response: 200 OK { prdDocument }`}
                 <li className="flex gap-2"><Check className="w-5 h-5 text-emerald-500 shrink-0" /> {entCredits} Poin AI (Credits)</li>
                 <li className="flex gap-2"><Check className="w-5 h-5 text-emerald-500 shrink-0" /> Dukungan Prioritas 24/7</li>
               </ul>
-              <button onClick={onOpenNewPRDModal} className="w-full py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <button onClick={onOpenUpgradeModal || onOpenNewPRDModal} className="w-full py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                 Hubungi Kami
               </button>
             </div>
