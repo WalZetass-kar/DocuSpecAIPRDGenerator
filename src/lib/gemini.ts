@@ -174,9 +174,9 @@ Additional Instructions: ${prdInputs.additionalPrompt || 'None'}`;
   const defaultPRDFallback: Partial<PRDDocument> = {
     executiveSummary: prdInputs.problemStatement || 'PRD otomatis dibuat berdasarkan spesifikasi awal.',
     problemStatement: prdInputs.problemStatement || 'Masalah utama yang diidentifikasi.',
-    goals: { businessGoals: prdInputs.businessGoals || 'Meningkatkan efisiensi kerja', nonGoals: 'Fitur di luar cakupan v1' },
+    goals: { businessGoals: [prdInputs.businessGoals || 'Meningkatkan efisiensi kerja'], nonGoals: ['Fitur di luar cakupan v1'] },
     successMetrics: [{ metric: 'User Adoption', target: '1000 users', timeframe: '30 hari' }],
-    businessRequirements: 'Sistem harus aman, cepat, dan mudah digunakan.',
+    businessRequirements: ['Sistem harus aman, cepat, dan mudah digunakan.'],
     functionalRequirements: [
       {
         id: 'FR-001',
@@ -184,7 +184,7 @@ Additional Instructions: ${prdInputs.additionalPrompt || 'None'}`;
         priority: 'P0',
         description: 'Fungsionalitas utama aplikasi',
         userStory: 'Sebagai user, saya ingin menggunakan fitur utama ini.',
-        acceptanceCriteria: 'Given user membuka aplikasi, When mengklik tombol utama, Then sistem merespons cepat.'
+        acceptanceCriteria: ['Given user membuka aplikasi, When mengklik tombol utama, Then sistem merespons cepat.']
       }
     ],
     techStack: prdInputs.techStack || { frontend: 'React', backend: 'Node.js', database: 'Supabase', authentication: 'Supabase Auth', hosting: 'Vercel', apiIntegrations: 'Gemini AI' },
