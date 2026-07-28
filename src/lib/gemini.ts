@@ -1,7 +1,14 @@
 import { supabase } from './supabase';
 import { PRDInput, PRDDocument } from '../types';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
+const getApiKey = () => {
+  return (
+    import.meta.env.VITE_GEMINI_API_KEY ||
+    import.meta.env.GEMINI_API_KEY ||
+    import.meta.env.NEXT_PUBLIC_GEMINI_API_KEY ||
+    ''
+  ).trim();
+};
 
 export async function checkAndDeductCredits(): Promise<boolean> {
   try {
@@ -20,7 +27,7 @@ async function callGemini(promptText: string, systemInstruction: string, expectJ
   // Deduct credits if possible
   await checkAndDeductCredits();
 
-  const apiKey = GEMINI_API_KEY.trim();
+  const apiKey = getApiKey();
   
   if (!apiKey) {
     throw new Error('API Key Gemini belum disetel di Vercel Environment Variables (VITE_GEMINI_API_KEY).');
