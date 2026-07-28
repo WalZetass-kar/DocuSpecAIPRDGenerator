@@ -33,12 +33,12 @@ async function callGemini(promptText: string, systemInstruction: string, expectJ
     throw new Error('API Key Gemini belum disetel di Vercel Environment Variables (VITE_GEMINI_API_KEY).');
   }
 
-  // List of models to attempt in order
+  // List of valid API models to attempt in order
   const modelsToTry = [
+    'gemini-flash-latest',
     'gemini-2.0-flash',
-    'gemini-1.5-flash-latest',
-    'gemini-1.5-flash',
-    'gemini-1.5-pro'
+    'gemini-2.0-flash-lite',
+    'gemini-pro-latest'
   ];
 
   let lastError: any = null;
