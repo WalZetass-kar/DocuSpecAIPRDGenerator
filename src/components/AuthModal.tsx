@@ -31,6 +31,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
           options: {
             data: {
               full_name: name,
+              role: 'User',
             },
           },
         });
@@ -42,7 +43,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
             id: data.user.id,
             name: data.user.user_metadata.full_name || 'User',
             email: data.user.email || email,
-            role: 'Product Manager',
+            role: 'User',
             credits: 5
           });
           onClose();
@@ -67,7 +68,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
             id: data.user.id,
             name: profile?.name || data.user.user_metadata.full_name || 'User',
             email: data.user.email || email,
-            role: profile?.role || 'Product Manager',
+            role: profile?.role || data.user.user_metadata.role || 'User',
             credits: profile?.credits || 0,
           });
           onClose();
