@@ -28,20 +28,28 @@ interface PRDGeneratorModalProps {
 
 const CATEGORIES: ProjectCategory[] = [
   'AI SaaS',
-  'Mobile App',
-  'E-Commerce',
-  'POS',
-  'ERP',
-  'LMS',
-  'CRM',
-  'Website',
-  'Portfolio',
-  'Landing Page',
-  'Company Profile',
-  'IoT',
-  'Fintech',
-  'Healthcare',
+  'Marketplace',
   'Education',
+  'School',
+  'University',
+  'Healthcare',
+  'Fintech',
+  'ERP',
+  'CRM',
+  'POS',
+  'Inventory',
+  'E-Commerce',
+  'Food Delivery',
+  'Hotel',
+  'Travel',
+  'IoT',
+  'Chat Application',
+  'Social Media',
+  'Portfolio',
+  'Company Profile',
+  'Website',
+  'Mobile App',
+  'Landing Page',
   'Game',
 ];
 
@@ -197,13 +205,13 @@ export const PRDGeneratorModal: React.FC<PRDGeneratorModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <span>AI PRD Generator</span>
+                <span>AI Software Documentation Platform</span>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#B11226]/10 text-[#B11226]">
-                  Gemini 3.6 Flash
+                  PRD • SRS • SDD • UI/UX • ERD • API
                 </span>
               </h2>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Lengkapi formulir di bawah atau gunakan tombol Auto-Fill AI.
+                Otomatis susun PRD, SRS, SDD, Diagram Flow, Skema ERD Database, Endpoint REST API, hingga Prompt Cursor AI.
               </p>
             </div>
           </div>
@@ -579,6 +587,21 @@ export const PRDGeneratorModal: React.FC<PRDGeneratorModalProps> = ({
                   />
                 </div>
               </div>
+            </div>
+
+            {/* Custom Enterprise Knowledge Base Injection */}
+            <div className="p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800/60 space-y-2">
+              <label className="font-bold text-xs text-blue-900 dark:text-blue-300 flex items-center justify-between">
+                <span>Enterprise Knowledge Base / Coding Standard Context (Opsional)</span>
+                <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono">Injeksi Standar Perusahaan</span>
+              </label>
+              <textarea
+                rows={2}
+                placeholder="Tempelkan aturan coding internal, pedoman nama database, atau standar OWASP perusahaan di sini..."
+                value={formData.additionalPrompt}
+                onChange={(e) => setFormData({ ...formData, additionalPrompt: e.target.value })}
+                className="w-full px-3 py-2 border border-blue-200 dark:border-blue-800 rounded-lg bg-white dark:bg-gray-900 focus:outline-none focus:border-[#B11226] text-xs text-gray-900 dark:text-gray-100"
+              />
             </div>
 
             {/* Additional Instructions */}

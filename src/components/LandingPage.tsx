@@ -89,24 +89,17 @@ Begin step-by-step implementation following the 36-point PRD backlog.`;
 
       {/* Hero Section */}
       <section className="relative pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-        {/* Top Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B11226]/10 text-[#B11226] dark:bg-[#B11226]/20 dark:text-red-400 text-xs font-bold border border-[#B11226]/20 mb-8 shadow-sm animate-fade-in">
-          <Sparkles className="w-4 h-4 text-[#B11226] dark:text-red-400" />
-          <span>Generasi Baru AI Product Requirements Document Platform</span>
-        </div>
-
         {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-gray-900 dark:text-white max-w-4xl mx-auto leading-tight">
-          Buat Product Requirements Document Berkualitas AI dalam{' '}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-gray-900 dark:text-white max-w-5xl mx-auto leading-tight">
+          Hasilkan Seluruh Dokumentasi Software Sebelum Coding dalam{' '}
           <span className="bg-gradient-to-r from-[#B11226] via-[#7A0C12] to-red-600 bg-clip-text text-transparent">
             Hitungan Menit
           </span>
         </h1>
 
         {/* Subheadline */}
-        <p className="mt-6 text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-normal leading-relaxed">
-          Bangun aplikasi dengan spesifikasi yang jelas sebelum mulai coding. Dioptimalkan penuh untuk
-          dikonsumsi oleh <strong className="text-gray-900 dark:text-white font-semibold">Cursor, Windsurf, Claude, Gemini, ChatGPT</strong> dan tim developer.
+        <p className="mt-6 text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto font-normal leading-relaxed">
+          Platform AI All-in-One untuk mempublikasikan <strong className="text-gray-900 dark:text-white font-bold">PRD, SRS Requirements (ISO 29148), SDD Architecture (IEEE 1016), Diagram Flow, Skema ERD Database, Endpoint REST API (OpenAPI/Swagger), Postman Collection,</strong> hingga <strong className="text-gray-900 dark:text-white font-bold">System Prompt Siap Pakai untuk Cursor AI & Claude Code</strong>.
         </p>
 
         {/* CTAs */}
@@ -116,25 +109,35 @@ Begin step-by-step implementation following the 36-point PRD backlog.`;
             className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-[#B11226] to-[#7A0C12] hover:opacity-95 rounded-xl shadow-lg shadow-[#B11226]/25 hover:shadow-xl hover:shadow-[#B11226]/35 active:scale-98 transition-all cursor-pointer"
           >
             <Sparkles className="w-5 h-5 text-white" />
-            <span>Buat PRD Sekarang</span>
+            <span>Generate Dokumen Sekarang</span>
             <ArrowRight className="w-5 h-5" />
           </button>
-
+          <button
+            onClick={onViewDemo}
+            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 text-base font-bold text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xs transition-all cursor-pointer"
+          >
+            <Layout className="w-5 h-5 text-[#B11226]" />
+            <span>Buka Dashboard App</span>
+          </button>
         </div>
 
         {/* Feature Badges under CTA */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-gray-500 dark:text-gray-400 font-medium">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-gray-600 dark:text-gray-300 font-medium">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-[#22C55E]" />
-            <span>36 Poin Struktur Teknis Lengkap</span>
+            <span>PRD • SRS • SDD • ERD • API</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-[#22C55E]" />
-            <span>Cursor & Windsurf Ready</span>
+            <span>Cursor, Windsurf & Claude Ready</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-[#22C55E]" />
-            <span>Export MD, PDF, DOCX, JSON, TXT</span>
+            <span>Postman & GitHub Sync Direct</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-[#22C55E]" />
+            <span>Export PDF, MD, DOCX, Postman JSON</span>
           </div>
         </div>
 

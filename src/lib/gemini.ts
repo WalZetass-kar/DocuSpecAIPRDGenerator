@@ -179,7 +179,7 @@ Additional Instructions: ${prdInputs.additionalPrompt || 'None'}`;
   const rawText = await callGemini(promptText, systemInstruction, true, 36);
   
   const defaultPRDFallback: Partial<PRDDocument> = {
-    executiveSummary: prdInputs.problemStatement || 'PRD otomatis dibuat berdasarkan spesifikasi awal.',
+    executiveSummary: prdInputs.problemStatement || 'Dokumentasi otomatis dibuat berdasarkan spesifikasi awal.',
     problemStatement: prdInputs.problemStatement || 'Masalah utama yang diidentifikasi.',
     goals: { businessGoals: [prdInputs.businessGoals || 'Meningkatkan efisiensi kerja'], nonGoals: ['Fitur di luar cakupan v1'] },
     successMetrics: [{ metric: 'User Adoption', target: '1000 users', timeframe: '30 hari' }],
@@ -192,6 +192,98 @@ Additional Instructions: ${prdInputs.additionalPrompt || 'None'}`;
         description: 'Fungsionalitas utama aplikasi',
         userStory: 'Sebagai user, saya ingin menggunakan fitur utama ini.',
         acceptanceCriteria: ['Given user membuka aplikasi, When mengklik tombol utama, Then sistem merespons cepat.']
+      }
+    ],
+    srsDocument: {
+      introduction: `Dokumen Software Requirements Specification (SRS) ini mendefinisikan persyaratan fungsional dan teknis untuk sistem ${prdInputs.projectName || 'Aplikasi'}.`,
+      purpose: 'Memberikan acuan baku bagi pengembang, penguji QA, dan pemangku kepentingan mengenai batasan sistem.',
+      productPerspective: `${prdInputs.projectName || 'Sistem'} beroperasi sebagai aplikasi ${prdInputs.platform || 'Web'} mandiri dengan arsitektur terisolasi.`,
+      userClasses: ['End User', 'Product Admin', 'System Administrator', 'DevOps / QA Engineer'],
+      operatingEnvironment: `${prdInputs.platform || 'Web Browser'} (Chrome, Firefox, Safari) & Cloud Host: ${prdInputs.techStack?.hosting || 'Google Cloud Run'}`,
+      designConstraints: ['Compliance keamanan OWASP Top 10', 'Waktu respons API di bawah 300ms', 'Desain UI responsive mobile-first'],
+      assumptions: ['Pengguna memiliki koneksi internet stabil', 'Browser mendukung ES6+ dan LocalStorage'],
+      externalInterfaces: [`REST API: ${prdInputs.techStack?.backend || 'Express.js'}`, `Database: ${prdInputs.techStack?.database || 'PostgreSQL'}`, `Auth: ${prdInputs.techStack?.authentication || 'OAuth2'}`],
+      validationRules: ['Email harus berformat valid RFC 5322', 'Password minimal 8 karakter dengan alfabet & angka'],
+      businessRules: ['Aktivasi akun memerlukan verifikasi email', 'Akses fitur khusus dibatasi oleh Role Permission'],
+      errorHandling: 'Sistem menangani pengecualian secara global dengan HTTP status code terstandar (400, 401, 403, 404, 500) dan log JSON.',
+      loggingStrategy: 'Structured logging (Winston/Pino) mencakup Timestamp, Trace ID, User ID, HTTP Method, dan Error Stack.',
+      compliance: ['ISO/IEC 27001 Security Standard', 'GDPR Data Protection Principles', 'WCAG 2.1 AA Accessibility']
+    },
+    sddDocument: {
+      architectureOverview: `Arsitektur ${prdInputs.projectName || 'Sistem'} menerapkan pola decoupled client-server berbasis Microservices / Modular Monolith.`,
+      frontendArchitecture: `${prdInputs.techStack?.frontend || 'React 19 + TypeScript + Tailwind CSS v4'}. State dipelihara menggunakan React Hooks dan Context API.`,
+      backendArchitecture: `${prdInputs.techStack?.backend || 'Node.js Express API Server'} berarsitektur MVC / Layered Architecture.`,
+      serviceLayer: 'Service layer memisahkan logika bisnis aplikasi dari pengontrol HTTP (Controllers) dan akses data (Repositories).',
+      repositoryPattern: 'Repository pattern mengabstraksi kueri database sehingga mempermudah pengujian terisolasi (Unit Testing).',
+      authenticationFlow: 'Autentikasi menggunakan JSON Web Token (JWT) berumur pendek dengan Refresh Token yang disimpan di HTTP-Only Cookie.',
+      authorizationModel: 'Role-Based Access Control (RBAC) dengan hirarki permission (Admin, Editor, Viewer).',
+      folderStructure: `src/\n ├── components/\n ├── pages/\n ├── services/\n ├── repository/\n ├── utils/\n └── types.ts`,
+      designPatterns: ['Repository Pattern', 'Singleton Database Connection', 'Factory Pattern for AI Engine', 'Observer Pattern for Events'],
+      cachingStrategy: 'Redis Caching Layer untuk menyimpan sesi pengguna dan hasil kueri dataset yang jarang berubah.',
+      scalingStrategy: 'Horizontal Auto-scaling berdasarkan utilisasi CPU/RAM di Google Cloud Run / Kubernetes Container.',
+      ciCdStrategy: 'Automated GitHub Actions Pipeline: Lint Check → Unit Test → Build Docker Image → Deploy to Staging/Production.',
+      monitoringLogging: 'Monitoring performa aplikasi menggunakan Prometheus + Grafana dan alert otomatis via Slack / Email.',
+      securityLayer: 'Pengamanan HTTPS/TLS 1.3, Rate Limiting (100 req/min), CORS Whitelist, Helmet Security Headers, dan Sanitasi SQL Injection.'
+    },
+    wireframeSpecs: {
+      lowFidelity: 'Draft sketsa tata letak kasar: Header Bar, Left Sidebar Navigation, Center Document Editor Canvas, Right AI Panel.',
+      mediumFidelity: 'Spesifikasi grid UI: 12-Column Responsive Layout dengan spacing 16px/24px dan skema warna high-contrast.',
+      asciiWireframe: `+-------------------------------------------------------------+\n| [Logo] DocuSpec Studio            [Export] [Share] [User]   |\n+--------------+----------------------------------------------+\n| - Dashboard  |  Document Title: My Enterprise System        |\n| - PRD / SRS  |  ==========================================  |\n| - SDD Arch   |  1. Executive Summary                        |\n| - Database   |  Lorem ipsum dolor sit amet...               |\n| - API Specs  |                                              |\n+--------------+----------------------------------------------+`,
+      mermaidWireframe: `graph TD\n  A[Landing Page] --> B(Register / Login)\n  B --> C{Verified?}\n  C -- Yes --> D[Dashboard Workspace]\n  C -- No --> E[Verification Prompt]\n  D --> F[Generate New Document]\n  F --> G[Edit & Export PDF/MD]`
+    },
+    testCasesList: [
+      {
+        id: 'TC-001',
+        testType: 'Unit Test',
+        feature: 'Form Auto-Fill AI',
+        scenario: 'Memastikan fungsi auto-fill mengembalikan data JSON terstruktur',
+        given: 'User memasukkan nama proyek valid',
+        when: 'Tombol Auto-Fill AI diklik',
+        then: 'Formulir terisi otomatis tanpa error sintaks',
+        status: 'passed'
+      },
+      {
+        id: 'TC-002',
+        testType: 'API Test',
+        feature: 'Endpoint Document Generation',
+        scenario: 'Pengujian integrasi API Gemini untuk generasi dokumen 36 seksi',
+        given: 'Payload PRDInput lengkap dikirimkan ke endpoint /api/generate',
+        when: 'Server memproses permintaan ke Gemini API',
+        then: 'HTTP 200 OK dikembalikan berisi objek PRDDocument utuh',
+        status: 'passed'
+      },
+      {
+        id: 'TC-003',
+        testType: 'Security Test',
+        feature: 'Autentikasi & RLS Storage',
+        scenario: 'Memastikan user tidak dapat membaca dokumen milik workspace lain',
+        given: 'User A mencoba mengakses PRD ID milik User B',
+        when: 'Query Supabase dipanggil',
+        then: 'Sistem mengembalikan 403 Forbidden atau array kosong',
+        status: 'passed'
+      }
+    ],
+    riskAnalysisList: [
+      {
+        category: 'Technical Risk',
+        risk: 'Batasan Rate Limit / Quota Kuota API Gemini AI saat puncak trafik',
+        impact: 'High',
+        likelihood: 'Medium',
+        mitigation: 'Implementasi fallback ke model Gemini Flash Lite & caching hasil generasi secara lokal.'
+      },
+      {
+        category: 'Security Risk',
+        risk: 'Kebocoran API Key di sisi Frontend client',
+        impact: 'High',
+        likelihood: 'Low',
+        mitigation: 'Menyimpan API Key di Environment Variable rahasia server / Vercel Edge Config.'
+      },
+      {
+        category: 'Business Risk',
+        risk: 'Kritik ketidaklengkapan dokumen dari tim engineering senior',
+        impact: 'Medium',
+        likelihood: 'Low',
+        mitigation: 'Penerapan Final Quality Gate score minimal 95% sebelum dokumen dipublikasikan.'
       }
     ],
     aiCodingPrompt: `Buatkan aplikasi ${prdInputs.projectName} dengan spesifikasi: ${prdInputs.mainFeatures}`

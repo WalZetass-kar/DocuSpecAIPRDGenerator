@@ -173,13 +173,13 @@ export const TEMPLATES: TemplatePreset[] = [
   {
     id: 'tpl-lms',
     title: 'Interactive E-Learning & LMS Platform',
-    category: 'LMS',
+    category: 'Education',
     description: 'Platform pembelajaran digital untuk sekolah, universitas, dan program sertifikasi online.',
     iconName: 'GraduationCap',
     badge: 'Edu',
     inputs: {
       projectName: 'EduMind LMS',
-      category: 'LMS',
+      category: 'Education',
       platform: 'Web',
       targetUser: 'Siswa, instruktur kursus, dan administrator institusi pendidikan',
       problemStatement: 'Siswa mudah bosan dengan video materi pasif dan tidak ada pelacakan kelulusan kuis secara otomatis.',

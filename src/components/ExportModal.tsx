@@ -112,6 +112,44 @@ ${prd.aiCodingPrompt || '(Belum tersedia)'}
     a.click();
   };
 
+  // Export Postman v2.1 Collection
+  const handleDownloadPostmanCollection = () => {
+    const safeApis = prd.apiSpecification || [];
+    const postmanCollection = {
+      info: {
+        name: `${prd.title || 'DocuSpec API'} Collection`,
+        description: `Generated from DocuSpec AI Software Documentation Platform for ${prd.title}`,
+        schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+      },
+      item: safeApis.map(api => ({
+        name: api.description || api.endpoint,
+        request: {
+          method: api.method || 'GET',
+          header: [
+            { key: 'Content-Type', value: 'application/json' },
+            { key: 'Authorization', value: 'Bearer {{token}}' }
+          ],
+          url: {
+            raw: `{{baseUrl}}${api.endpoint}`,
+            host: ['{{baseUrl}}'],
+            path: api.endpoint.split('/').filter(Boolean)
+          },
+          body: api.reqPayload ? {
+            mode: 'raw',
+            raw: api.reqPayload
+          } : undefined
+        }
+      }))
+    };
+
+    const blob = new Blob([JSON.stringify(postmanCollection, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${(prd.title || 'api').toLowerCase().replace(/\s+/g, '-')}.postman_collection.json`;
+    a.click();
+  };
+
   const handleDownloadTXT = () => {
     const txtContent = generateMarkdown();
     const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8;' });
@@ -388,16 +426,16 @@ ${prd.aiCodingPrompt || '(Belum tersedia)'}
             </button>
 
             <button
-              onClick={handlePrintPDF}
-              className="p-3.5 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-[#B11226] bg-gray-50 dark:bg-gray-800/60 text-left transition-all space-y-1 group"
+              onClick={handleDownloadPostmanCollection}
+              className="p-3.5 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 text-left transition-all space-y-1 group"
             >
               <div className="flex items-center justify-between">
-                <span className="font-bold text-gray-900 dark:text-white group-hover:text-[#B11226]">
-                  PDF / Cetak
+                <span className="font-bold text-gray-900 dark:text-white group-hover:text-orange-600">
+                  Postman Collection (.json)
                 </span>
-                <Printer className="w-4 h-4 text-emerald-500" />
+                <Code className="w-4 h-4 text-orange-500" />
               </div>
-              <p className="text-[10px] text-gray-500">Tampilan cetak siap presentasi.</p>
+              <p className="text-[10px] text-gray-500">Postman v2.1 API Collection import.</p>
             </button>
           </div>
 

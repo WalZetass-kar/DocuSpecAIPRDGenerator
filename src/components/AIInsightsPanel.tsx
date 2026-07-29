@@ -56,141 +56,78 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
     const maxScore = 100;
     const insights: InsightItem[] = [];
 
-    // 1. Executive Summary & Problem (15 pts)
+    // 1. Executive Summary & Problem Statement (10 pts)
     const hasSummary = prd.executiveSummary && prd.executiveSummary.length > 50;
     const hasProblem = prd.problemStatement && prd.problemStatement.length > 30;
-    if (hasSummary && hasProblem) score += 15;
-    else if (hasSummary || hasProblem) score += 8;
+    if (hasSummary && hasProblem) score += 10;
+    else if (hasSummary || hasProblem) score += 5;
     else {
       insights.push({
         id: 'ins-summary',
         type: 'critical',
         category: 'vision',
-        title: 'Ringkasan Eksekutif & Problem Statement Belum Detail',
-        description:
-          'Dokumen membutuhkan ringkasan konteks proyek dan akar masalah yang lebih jelas agar tim paham urgensi produk.',
+        title: 'Executive Summary & Problem Statement Belum Lengkap',
+        description: 'Ringkasan eksekutif dan problem statement membutuhkan perincian agar konteks bisnis jelas.',
         sectionId: 'sec-summary',
         actionType: 'add_missing',
         actionLabel: 'Lengkapi Ringkasan dengan AI',
       });
     }
 
-    // 2. Business Goals & Metrics (15 pts)
+    // 2. Business Goals & Success Metrics / KPIs (10 pts)
     const hasGoals = prd.goals?.businessGoals && prd.goals.businessGoals.length > 0;
     const hasMetrics = prd.successMetrics && prd.successMetrics.length > 0;
-    if (hasGoals && hasMetrics) score += 15;
-    else {
-      insights.push({
-        id: 'ins-metrics',
-        type: 'warning',
-        category: 'vision',
-        title: 'Metrik Kesuksesan (KPIs) Membutuhkan Target Kuantitatif',
-        description:
-          'Tambahkan target kuantitatif dan jangka waktu pencapaian pada setiap metrik agar progres tim dapat diukur.',
-        sectionId: 'sec-goals',
-        actionType: 'add_missing',
-        actionLabel: 'Sempurnakan KPI dengan AI',
-      });
-    }
+    if (hasGoals && hasMetrics) score += 10;
+    else score += 5;
 
-    // 3. Functional Requirements & User Stories (25 pts)
+    // 3. Functional Requirements & User Stories (10 pts)
     const funcReqs = prd.functionalRequirements || [];
-    if (funcReqs.length >= 3) {
-      score += 15;
-      const hasGWT = funcReqs.some(
-        (r) =>
-          (Array.isArray(r.acceptanceCriteria) && r.acceptanceCriteria.length > 0) ||
-          (typeof r.acceptanceCriteria === 'string' && (r.acceptanceCriteria as string).trim().length > 0)
-      );
-      if (hasGWT) score += 10;
-      else {
-        insights.push({
-          id: 'ins-gwt',
-          type: 'warning',
-          category: 'spec',
-          title: 'Acceptance Criteria Belum Berformat Given-When-Then',
-          description:
-            'Menggunakan format Given-When-Then sangat membantu AI Coding Agent (Cursor/Claude) dalam menghasilkan unit test yang akurat.',
-          sectionId: 'sec-functional',
-          actionType: 'fix_requirements',
-          actionLabel: 'Format Given-When-Then dengan AI',
-        });
-      }
-    } else {
-      insights.push({
-        id: 'ins-func',
-        type: 'critical',
-        category: 'spec',
-        title: 'User Stories Fungsional Kurang dari 3 Fitur Utama',
-        description:
-          'Rincikan minimal 3–5 fitur P0/P1 beserta user story spesifik agar pengembang tidak perlu menebak logika aplikasi.',
-        sectionId: 'sec-functional',
-        actionType: 'add_missing',
-        actionLabel: 'Generate User Stories Tambahan',
-      });
-    }
+    if (funcReqs.length >= 3) score += 10;
+    else score += 4;
 
-    // 4. Architecture & Data Schema (20 pts)
-    const hasApi = prd.apiSpecification && prd.apiSpecification.length > 0;
+    // 4. Technical Architecture & Tech Stack (10 pts)
+    const hasTechStack = Boolean(prd.inputs?.techStack?.frontend && prd.inputs?.techStack?.backend);
+    if (hasTechStack) score += 10;
+    else score += 5;
+
+    // 5. Database Schema & ERD (10 pts)
     const hasDb = prd.databaseDesign && prd.databaseDesign.tables && prd.databaseDesign.tables.length > 0;
-    if (hasApi && hasDb) score += 20;
-    else if (hasApi || hasDb) score += 10;
-    else {
-      insights.push({
-        id: 'ins-arch',
-        type: 'critical',
-        category: 'architecture',
-        title: 'Spesifikasi API Endpoint & Skema Database Belum Ada',
-        description:
-          'Definisikan skema tabel database dan kontrak endpoint API agar pengembang backend dapat langsung membangun skema.',
-        sectionId: 'sec-api',
-        actionType: 'db_recommendations',
-        actionLabel: 'Susun API & Database ERD dengan AI',
-      });
-    }
+    if (hasDb) score += 10;
+    else score += 4;
 
-    // 5. Security & Risk Assessment (15 pts)
+    // 6. API Specification & Endpoints (10 pts)
+    const hasApi = prd.apiSpecification && prd.apiSpecification.length > 0;
+    if (hasApi) score += 10;
+    else score += 4;
+
+    // 7. Security & Accessibility Compliance (10 pts)
     const hasSecurity = prd.securityRequirements && prd.securityRequirements.length > 0;
-    const hasRisks = prd.riskAssessment && prd.riskAssessment.length > 0;
-    if (hasSecurity && hasRisks) score += 15;
-    else {
-      insights.push({
-        id: 'ins-sec',
-        type: 'warning',
-        category: 'security',
-        title: 'Standar Keamanan OWASP & Mitigasi Risiko Belum Lengkap',
-        description:
-          'Pastikan menyertakan poin proteksi autentikasi, enkripsi data, penanganan CORS/CSP, dan rencana mitigasi risiko.',
-        sectionId: 'sec-security',
-        actionType: 'security_recommendations',
-        actionLabel: 'Tambahkan Panduan Keamanan dengan AI',
-      });
-    }
+    if (hasSecurity) score += 10;
+    else score += 4;
 
-    // 6. AI System Prompt Quality (10 pts)
+    // 8. Testing Strategy & QA Readiness (10 pts)
+    const hasTesting = prd.testingStrategy && prd.testingStrategy.length > 0;
+    if (hasTesting) score += 10;
+    else score += 4;
+
+    // 9. Deployment, CI/CD & Risk Assessment (10 pts)
+    const hasDeployment = prd.deploymentStrategy && Boolean(prd.deploymentStrategy);
+    const hasRisks = prd.riskAssessment && prd.riskAssessment.length > 0;
+    if (hasDeployment && hasRisks) score += 10;
+    else score += 5;
+
+    // 10. AI Coding Prompt Quality (10 pts)
     const hasPrompt = prd.aiCodingPrompt && prd.aiCodingPrompt.length > 100;
     if (hasPrompt) score += 10;
-    else {
-      insights.push({
-        id: 'ins-prompt',
-        type: 'suggestion',
-        category: 'ai_prompt',
-        title: 'Prompt Khusus Cursor / Claude Dapat Dioptimalkan',
-        description:
-          'Generasikan instruksi sistem khusus AI yang mencakup aturan arsitektur, konvensi penamaan, dan batasan teknologi.',
-        sectionId: 'sec-prompt',
-        actionType: 'generate_ai_prompt',
-        actionLabel: 'Optimalkan Prompt Cursor',
-      });
-    }
+    else score += 4;
 
     // Category Breakdowns
     const catScores = {
-      vision: hasSummary && hasProblem ? (hasGoals ? 100 : 75) : 40,
-      spec: funcReqs.length >= 3 ? 90 : 50,
-      architecture: hasApi && hasDb ? 100 : hasApi || hasDb ? 60 : 30,
-      security: hasSecurity && hasRisks ? 95 : 50,
-      ai_prompt: hasPrompt ? 100 : 40,
+      vision: hasSummary && hasProblem ? (hasGoals ? 98 : 85) : 60,
+      spec: funcReqs.length >= 3 ? 98 : 70,
+      architecture: hasApi && hasDb ? 98 : 75,
+      security: hasSecurity && hasRisks ? 98 : 70,
+      ai_prompt: hasPrompt ? 98 : 65,
     };
 
     return {

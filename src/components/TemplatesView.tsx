@@ -24,7 +24,7 @@ export const TemplatesView: React.FC<TemplatesViewProps> = ({ onSelectTemplate }
       (selectedCategory === 'Retail & POS' && (tpl.category === 'POS' || tpl.category === 'E-Commerce')) ||
       (selectedCategory === 'Mobile' && tpl.category === 'Mobile App') ||
       (selectedCategory === 'Enterprise' && (tpl.category === 'ERP' || tpl.category === 'CRM' || tpl.category === 'Fintech')) ||
-      (selectedCategory === 'Education' && (tpl.category === 'LMS' || tpl.category === 'Education'));
+      (selectedCategory === 'Education' && (tpl.category === 'School' || tpl.category === 'University' || tpl.category === 'Education'));
     return matchesSearch && matchesCat;
   });
 

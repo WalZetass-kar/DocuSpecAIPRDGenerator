@@ -31,33 +31,13 @@ export const Footer: React.FC<FooterProps> = ({
             </p>
           </div>
 
-          {/* Quick Navigation Links */}
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-600 dark:text-gray-300 font-medium text-[11px]">
-            <button
-              onClick={() => onViewChange && onViewChange('dashboard')}
-              className="hover:text-[#B11226] transition-colors cursor-pointer"
-            >
-              Dashboard
-            </button>
-            <button
-              onClick={() => onViewChange && onViewChange('templates')}
-              className="hover:text-[#B11226] transition-colors cursor-pointer"
-            >
-              Template PRD
-            </button>
-            <button
-              onClick={onOpenGuideModal}
-              className="hover:text-[#B11226] transition-colors cursor-pointer flex items-center gap-1"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-[#B11226]" />
-              <span>Dokumentasi & Panduan</span>
-            </button>
-            <button
-              onClick={onOpenTeamModal}
-              className="hover:text-[#B11226] transition-colors cursor-pointer"
-            >
-              Manajemen Tim
-            </button>
+          {/* Quick Navigation Links - Security: Disabled for unauthenticated footer */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-400 font-medium text-[11px]">
+            <span>Privacy Policy</span>
+            <span>•</span>
+            <span>Terms of Service</span>
+            <span>•</span>
+            <span>Security Statement</span>
           </div>
         </div>
 

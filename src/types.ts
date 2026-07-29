@@ -1,19 +1,27 @@
 export type ProjectCategory =
+  | 'AI SaaS'
+  | 'Marketplace'
+  | 'Education'
+  | 'School'
+  | 'University'
+  | 'Healthcare'
+  | 'Fintech'
+  | 'ERP'
+  | 'CRM'
+  | 'POS'
+  | 'Inventory'
+  | 'E-Commerce'
+  | 'Food Delivery'
+  | 'Hotel'
+  | 'Travel'
+  | 'IoT'
+  | 'Chat Application'
+  | 'Social Media'
+  | 'Portfolio'
+  | 'Company Profile'
   | 'Website'
   | 'Mobile App'
-  | 'E-Commerce'
-  | 'POS'
-  | 'ERP'
-  | 'LMS'
-  | 'CRM'
-  | 'Portfolio'
   | 'Landing Page'
-  | 'Company Profile'
-  | 'IoT'
-  | 'AI SaaS'
-  | 'Fintech'
-  | 'Healthcare'
-  | 'Education'
   | 'Game';
 
 export type PlatformType = 'Web' | 'Mobile (iOS/Android)' | 'Desktop' | 'Cross-Platform' | 'API/Backend Service';
@@ -281,7 +289,62 @@ export interface PRDDocument {
   seoRequirements: string[];
   analyticsStrategy: AnalyticsEvent[];
   testingStrategy: TestingRule[];
-  deploymentStrategy:
+  // Dedicated Document Sections Extensions
+  srsDocument?: {
+    introduction: string;
+    purpose: string;
+    productPerspective: string;
+    userClasses: string[];
+    operatingEnvironment: string;
+    designConstraints: string[];
+    assumptions: string[];
+    externalInterfaces: string[];
+    validationRules: string[];
+    businessRules: string[];
+    errorHandling: string;
+    loggingStrategy: string;
+    compliance: string[];
+  };
+  sddDocument?: {
+    architectureOverview: string;
+    frontendArchitecture: string;
+    backendArchitecture: string;
+    serviceLayer: string;
+    repositoryPattern: string;
+    authenticationFlow: string;
+    authorizationModel: string;
+    folderStructure: string;
+    designPatterns: string[];
+    cachingStrategy: string;
+    scalingStrategy: string;
+    ciCdStrategy: string;
+    monitoringLogging: string;
+    securityLayer: string;
+  };
+  wireframeSpecs?: {
+    lowFidelity: string;
+    mediumFidelity: string;
+    asciiWireframe: string;
+    mermaidWireframe: string;
+  };
+  testCasesList?: {
+    id: string;
+    testType: 'Unit Test' | 'Integration Test' | 'UI Test' | 'API Test' | 'Security Test' | 'Performance Test' | 'Acceptance Test';
+    feature: string;
+    scenario: string;
+    given: string;
+    when: string;
+    then: string;
+    status: 'passed' | 'pending';
+  }[];
+  riskAnalysisList?: {
+    category: 'Technical Risk' | 'Business Risk' | 'Security Risk' | 'Operational Risk';
+    risk: string;
+    impact: 'High' | 'Medium' | 'Low';
+    likelihood: 'High' | 'Medium' | 'Low';
+    mitigation: string;
+  }[];
+  deploymentStrategy?:
     | {
         stage: string;
         environment: string;
@@ -295,8 +358,27 @@ export interface PRDDocument {
   riskAssessment: RiskItem[];
   futureRoadmap: RoadmapPhase[];
   taskBreakdown: TaskItem[];
-  sprintPlanning: SprintPlan[];
-  releaseChecklist: ReleaseChecklistItem[];
+  sprintPlanning?: SprintPlan[];
+  releaseChecklist?: ReleaseChecklistItem[];
+  activeCollaborators?: {
+    id: string;
+    name: string;
+    avatar?: string;
+    role: string;
+    activeSection?: string;
+    status: 'online' | 'editing' | 'idle';
+  }[];
+  githubRepoConfig?: {
+    repoOwner: string;
+    repoName: string;
+    branch: string;
+    lastPushedAt?: string;
+  };
+  customKnowledgeBase?: {
+    fileName: string;
+    fileContent: string;
+    uploadedAt: string;
+  }[];
   comments?: CommentItem[];
   aiCodingPrompt: string;
 }

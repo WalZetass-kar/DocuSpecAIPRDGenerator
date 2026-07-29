@@ -80,6 +80,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   userName = 'Ihwal',
 }) => {
   const [activeMenuId, setActiveMenuId] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  // Initial and tab-switch loading skeleton shimmer simulation
+  React.useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [filterTab, filterFolderId]);
 
   React.useEffect(() => {
     const handleClickOutside = () => setActiveMenuId(null);
@@ -136,7 +146,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 1: Buat PRD Baru */}
         <button
           onClick={onOpenNewPRDModal}
-          className="p-5 rounded-2xl bg-[#B11226] hover:bg-[#7A0C12] text-white shadow-md shadow-[#B11226]/20 transition-all flex items-center justify-between group cursor-pointer text-left"
+          className="p-5 rounded-2xl bg-[#B11226] hover:bg-[#7A0C12] text-white shadow-md shadow-[#B11226]/20 transition-all card-hover-effect flex items-center justify-between group cursor-pointer text-left"
         >
           <div>
             <span className="font-extrabold text-sm block">Buat PRD Baru</span>
@@ -152,7 +162,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 2: Gunakan Template */}
         <button
           onClick={onOpenTemplates}
-          className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs hover:border-gray-300 dark:hover:border-gray-700 transition-all flex items-center justify-between group cursor-pointer text-left"
+          className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs hover:border-gray-300 dark:hover:border-gray-700 transition-all card-hover-effect flex items-center justify-between group cursor-pointer text-left"
         >
           <div>
             <span className="font-extrabold text-sm text-gray-900 dark:text-white block">Gunakan Template</span>
@@ -168,7 +178,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 3: Import Dokumen */}
         <button
           onClick={onOpenImportModal}
-          className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs hover:border-gray-300 dark:hover:border-gray-700 transition-all flex items-center justify-between group cursor-pointer text-left"
+          className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs hover:border-gray-300 dark:hover:border-gray-700 transition-all card-hover-effect flex items-center justify-between group cursor-pointer text-left"
         >
           <div>
             <span className="font-extrabold text-sm text-gray-900 dark:text-white block">Import Dokumen</span>
@@ -184,7 +194,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 4: AI Review PRD */}
         <button
           onClick={onOpenAIReviewModal}
-          className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs hover:border-gray-300 dark:hover:border-gray-700 transition-all flex items-center justify-between group cursor-pointer text-left"
+          className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs hover:border-gray-300 dark:hover:border-gray-700 transition-all card-hover-effect flex items-center justify-between group cursor-pointer text-left"
         >
           <div>
             <span className="font-extrabold text-sm text-gray-900 dark:text-white block">AI Review PRD</span>
@@ -426,9 +436,28 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
             </div>
 
-            {/* Project List Items */}
+            {/* Project List Items with Skeleton Shimmer Loading State Support */}
             <div className="divide-y divide-gray-100 dark:divide-gray-800">
-              {filteredPRDs.length === 0 ? (
+              {isLoading ? (
+                /* Skeleton Loading Rows */
+                <div className="space-y-3 py-4">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="flex items-center justify-between p-3.5 rounded-2xl bg-gray-50/70 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800/60 animate-pulse">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl skeleton-shimmer" />
+                        <div className="space-y-2">
+                          <div className="w-56 h-3.5 rounded-lg skeleton-shimmer" />
+                          <div className="w-28 h-2.5 rounded-lg skeleton-shimmer" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-5 rounded-full skeleton-shimmer" />
+                        <div className="w-24 h-2 rounded-full skeleton-shimmer hidden sm:block" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : filteredPRDs.length === 0 ? (
                 <div className="py-12 text-center space-y-3">
                   <div className="w-12 h-12 rounded-2xl bg-[#B11226]/10 text-[#B11226] flex items-center justify-center mx-auto">
                     <FolderOpen className="w-6 h-6" />

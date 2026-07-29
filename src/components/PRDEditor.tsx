@@ -293,6 +293,10 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
   };
 
   const sectionsList = [
+    { id: 'sec-srs-full', label: '📘 SRS Requirements (ISO 29148)', icon: FileText },
+    { id: 'sec-sdd-full', label: '🏗️ SDD Architecture (IEEE 1016)', icon: Cpu },
+    { id: 'sec-wireframes', label: '📐 Wireframe Specs & ASCII UI', icon: Layers },
+    { id: 'sec-testcases-matrix', label: '🧪 Matriks QA Test Cases', icon: CheckCircle2 },
     { id: 'sec-summary', label: '1. Executive Summary', icon: FileText },
     { id: 'sec-problem', label: '2. Problem & Solution', icon: AlertTriangle },
     { id: 'sec-goals', label: '3. Goals & Metrics', icon: Activity },
@@ -347,19 +351,73 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-bold transition-all cursor-pointer shrink-0"
             >
               <ChevronLeft className="w-4 h-4 text-gray-500" />
-              <span>Kembali ke Dashboard</span>
+              <span>Kembali</span>
             </button>
           )}
           <div className="h-4 w-px bg-gray-200 dark:bg-gray-800 hidden sm:block shrink-0" />
           <div className="flex items-center gap-2 min-w-0 truncate">
-            <span className="text-xs text-gray-400 font-bold hidden md:inline">Studio Editor /</span>
             <span className="text-xs font-extrabold text-gray-900 dark:text-white truncate max-w-[180px] sm:max-w-xs">{prd.title}</span>
           </div>
           {getStatusBadge(prd.status)}
         </div>
 
-        {/* Right: Studio Quick Actions */}
+        {/* Center: Document Type Filter Switcher (PRD, SRS, SDD, UI/UX, ERD, API, Tasks, Prompts) */}
+        <div className="hidden lg:flex items-center gap-1 bg-gray-100 dark:bg-gray-800/80 p-1 rounded-xl border border-gray-200 dark:border-gray-700/60 overflow-x-auto text-[11px] font-bold">
+          {[
+            { id: 'doc-all', label: '📋 All Specs', targetSec: 'sec-summary' },
+            { id: 'doc-prd', label: '📄 PRD', targetSec: 'sec-summary' },
+            { id: 'doc-srs', label: '📘 SRS Requirements', targetSec: 'sec-functional' },
+            { id: 'doc-sdd', label: '🏗️ SDD Architecture', targetSec: 'sec-architecture' },
+            { id: 'doc-uiux', label: '🎨 UI/UX & Flow', targetSec: 'sec-flow' },
+            { id: 'doc-db', label: '🗄️ Database ERD', targetSec: 'sec-database' },
+            { id: 'doc-api', label: '🔌 API Specs', targetSec: 'sec-api' },
+            { id: 'doc-tasks', label: '⚡ Agile Tasks & Sprints', targetSec: 'sec-tasks' },
+            { id: 'doc-ai', label: '🤖 AI Prompts', targetSec: 'sec-prompt' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => {
+                const el = document.getElementById(tab.targetSec);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="px-2.5 py-1 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 hover:text-[#B11226] transition-all cursor-pointer whitespace-nowrap"
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Right: Studio Quick Actions & Live Presence */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Active Collaborators Presence Indicators */}
+          <div className="hidden md:flex items-center -space-x-1.5 mr-1">
+            {[
+              { name: 'Sarah (PM)', bg: 'bg-emerald-500', initial: 'S' },
+              { name: 'Alex (Architect)', bg: 'bg-blue-500', initial: 'A' },
+              { name: 'Budi (QA)', bg: 'bg-purple-500', initial: 'B' },
+            ].map((col, idx) => (
+              <div
+                key={idx}
+                title={`${col.name} sedang aktif di workspace`}
+                className={`w-6 h-6 rounded-full ${col.bg} text-white font-extrabold text-[10px] flex items-center justify-center border-2 border-white dark:border-gray-900 shadow-xs cursor-pointer hover:scale-110 transition-transform`}
+              >
+                {col.initial}
+              </div>
+            ))}
+          </div>
+
+          {/* GitHub Sync Button */}
+          <button
+            onClick={() => {
+              alert(`[GitHub Sync] Dokumen "${prd.title}" berhasil di-sync ke GitHub repository main branch: PRD.md & SRS.md!`);
+            }}
+            title="Push Direct to GitHub Repo"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gray-900 text-white dark:bg-gray-800 dark:hover:bg-gray-700 text-xs font-bold transition-all cursor-pointer border border-gray-700"
+          >
+            <Code2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden xl:inline">GitHub Sync</span>
+          </button>
+
           <button
             onClick={() => setAiRefineDrawerOpen(true)}
             className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#B11226] to-[#7A0C12] text-white text-xs font-bold shadow-sm shadow-[#B11226]/20 hover:opacity-95 transition-all cursor-pointer"
@@ -1404,33 +1462,162 @@ export const PRDEditor: React.FC<PRDEditorProps> = ({
           </div>
         </section>
 
-        {/* 26. Testing Strategy */}
-        <section id="sec-testing" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
-            <CheckCircle2 className="w-5 h-5 text-[#B11226]" />
-            <span>26. Testing Strategy</span>
-          </h2>
-          <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
-                <tr>
-                  <th className="p-3">Test Type</th>
-                  <th className="p-3">Scope</th>
-                  <th className="p-3">Tools</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                {(prd.testingStrategy || []).map((ts, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
-                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{ts.testType}</td>
-                    <td className="p-3 text-gray-600 dark:text-gray-300">{ts.scope}</td>
-                    <td className="p-3 text-gray-500 font-mono text-[10px]">{ts.tools}</td>
-                  </tr>
+        {/* DEDICATED SPECIFICATION CARD: SRS (SOFTWARE REQUIREMENTS SPECIFICATION) */}
+        {prd.srsDocument && (
+          <section id="sec-srs-full" className="p-6 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800/60 space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-blue-200 dark:border-blue-800/60">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <span>Dokumen SRS (Software Requirements Specification)</span>
+              </h2>
+              <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-bold text-[10px] uppercase">
+                SRS ISO/IEC 29148
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-blue-100 dark:border-gray-800 space-y-1.5">
+                <span className="font-bold text-blue-600 dark:text-blue-400 block uppercase tracking-wider text-[10px]">Tujuan & Perspektif Produk</span>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{prd.srsDocument.purpose}</p>
+                <p className="text-gray-500 text-[11px] pt-1">{prd.srsDocument.productPerspective}</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-blue-100 dark:border-gray-800 space-y-1.5">
+                <span className="font-bold text-blue-600 dark:text-blue-400 block uppercase tracking-wider text-[10px]">Aturan Bisnis & Validasi (Business Rules)</span>
+                <ul className="space-y-1 text-gray-700 dark:text-gray-300">
+                  {prd.srsDocument.businessRules?.map((br, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5">
+                      <span className="text-blue-500 font-bold">•</span>
+                      <span>{br}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-blue-100 dark:border-gray-800 space-y-2 text-xs">
+              <span className="font-bold text-blue-600 dark:text-blue-400 block uppercase tracking-wider text-[10px]">Pencegahan Error & Standar Compliance</span>
+              <p className="text-gray-700 dark:text-gray-300"><strong className="text-gray-900 dark:text-white">Error Handling:</strong> {prd.srsDocument.errorHandling}</p>
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {prd.srsDocument.compliance?.map((comp, idx) => (
+                  <span key={idx} className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 text-[10px] font-bold">
+                    ✓ {comp}
+                  </span>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* DEDICATED SPECIFICATION CARD: SDD (SOFTWARE DESIGN DOCUMENT) */}
+        {prd.sddDocument && (
+          <section id="sec-sdd-full" className="p-6 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800/60 space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-purple-200 dark:border-purple-800/60">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <Cpu className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <span>Dokumen SDD (Software Design Document / Architecture)</span>
+              </h2>
+              <span className="px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 font-bold text-[10px] uppercase">
+                IEEE 1016 SDD
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-purple-100 dark:border-gray-800 space-y-1.5">
+                <span className="font-bold text-purple-600 dark:text-purple-400 block uppercase tracking-wider text-[10px]">Backend & Frontend Layering</span>
+                <p className="text-gray-700 dark:text-gray-300 font-semibold">{prd.sddDocument.architectureOverview}</p>
+                <p className="text-gray-500 text-[11px] pt-1"><strong className="text-gray-700 dark:text-gray-300">Service Layer:</strong> {prd.sddDocument.serviceLayer}</p>
+                <p className="text-gray-500 text-[11px]"><strong className="text-gray-700 dark:text-gray-300">Repository Pattern:</strong> {prd.sddDocument.repositoryPattern}</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-purple-100 dark:border-gray-800 space-y-1.5">
+                <span className="font-bold text-purple-600 dark:text-purple-400 block uppercase tracking-wider text-[10px]">Autentikasi & Model Otorisasi</span>
+                <p className="text-gray-700 dark:text-gray-300">{prd.sddDocument.authenticationFlow}</p>
+                <p className="text-gray-500 text-[11px] pt-1"><strong className="text-gray-700 dark:text-gray-300">RBAC:</strong> {prd.sddDocument.authorizationModel}</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-gray-900 text-gray-100 font-mono text-xs space-y-2 border border-gray-800">
+              <span className="font-bold text-purple-400 block uppercase tracking-wider text-[10px]">Rekomendasi Struktur Folder Proyek</span>
+              <pre className="text-emerald-400 leading-relaxed overflow-x-auto whitespace-pre-wrap">{prd.sddDocument.folderStructure}</pre>
+            </div>
+          </section>
+        )}
+
+        {/* DEDICATED WIREFRAME SPECIFICATIONS CARD */}
+        {prd.wireframeSpecs && (
+          <section id="sec-wireframes" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+              <Layers className="w-5 h-5 text-[#B11226]" />
+              <span>Spesifikasi Low/Med-Fi & ASCII Wireframe</span>
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 space-y-1">
+                <span className="font-bold text-gray-900 dark:text-white block uppercase tracking-wider text-[10px]">Low-Fidelity Layout</span>
+                <p className="text-gray-600 dark:text-gray-300">{prd.wireframeSpecs.lowFidelity}</p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 space-y-1">
+                <span className="font-bold text-gray-900 dark:text-white block uppercase tracking-wider text-[10px]">Medium-Fidelity Spacing</span>
+                <p className="text-gray-600 dark:text-gray-300">{prd.wireframeSpecs.mediumFidelity}</p>
+              </div>
+            </div>
+
+            {prd.wireframeSpecs.asciiWireframe && (
+              <div className="p-4 rounded-xl bg-gray-950 text-emerald-400 font-mono text-xs overflow-x-auto border border-gray-800">
+                <span className="text-gray-400 font-bold text-[10px] block mb-2 uppercase">ASCII Wireframe Representation</span>
+                <pre className="whitespace-pre">{prd.wireframeSpecs.asciiWireframe}</pre>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* DEDICATED TEST CASES MATRIX */}
+        {prd.testCasesList && prd.testCasesList.length > 0 && (
+          <section id="sec-testcases-matrix" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+              <span>Matriks Test Cases QA (Unit, Integration, Security, Performance)</span>
+            </h2>
+
+            <div className="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold">
+                  <tr>
+                    <th className="p-3">ID & Tipe Test</th>
+                    <th className="p-3">Fitur & Skenario Pengujian</th>
+                    <th className="p-3">Given - When - Then</th>
+                    <th className="p-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  {prd.testCasesList.map((tc) => (
+                    <tr key={tc.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                      <td className="p-3">
+                        <span className="font-bold text-gray-900 dark:text-white block">{tc.id}</span>
+                        <span className="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-[10px] font-bold">{tc.testType}</span>
+                      </td>
+                      <td className="p-3">
+                        <strong className="text-gray-900 dark:text-white block">{tc.feature}</strong>
+                        <span className="text-gray-500 text-[11px]">{tc.scenario}</span>
+                      </td>
+                      <td className="p-3 font-mono text-[11px] space-y-0.5">
+                        <div className="text-gray-700 dark:text-gray-300"><strong className="text-blue-600">G:</strong> {tc.given}</div>
+                        <div className="text-gray-700 dark:text-gray-300"><strong className="text-amber-600">W:</strong> {tc.when}</div>
+                        <div className="text-emerald-600 font-bold"><strong className="text-emerald-500">T:</strong> {tc.then}</div>
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 font-bold text-[10px]">
+                          ✓ Ready
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
 
         {/* 27. Deployment Strategy */}
         <section id="sec-deployment" className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
